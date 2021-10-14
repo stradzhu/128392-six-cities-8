@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-
-const Setting = {
-  COUNT_RENTAL_OFFERS: 789,
-};
+import {Setting} from './consts';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App countRentalOffers={Setting.COUNT_RENTAL_OFFERS} />
+    <App countRentalOffers={Setting.COUNT_RENTAL_OFFERS} countFavorites={Setting.COUNT_FAVORITES}/>
   </React.StrictMode>,
   document.getElementById('root'));

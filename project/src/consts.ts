@@ -1,10 +1,13 @@
+const Setting = {
+  COUNT_RENTAL_OFFERS: 789,
+  COUNT_FAVORITES: 123,
+};
+
 enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Property = '/property/:id',
-  FavoritesEmpty = '/favorites-empty',
-  MainEmpty = '/main-empty',
+  Offer = '/offer/:id',
 }
 
 enum AuthorizationStatus {
@@ -12,4 +15,4 @@ enum AuthorizationStatus {
   NoAuth = 'NO_AUTH'
 }
 
-export {AppRoute, AuthorizationStatus};
+export {Setting, AppRoute, AuthorizationStatus};

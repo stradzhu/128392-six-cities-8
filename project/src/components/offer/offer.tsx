@@ -1,8 +1,8 @@
 import {Link} from 'react-router-dom';
-import {AuthorizationStatus} from '../../const';
+import {AuthorizationStatus} from '../../consts';
 import Header from '../header/header';
 
-type PropertyProps = {
+type OfferProps = {
   authorizationStatus: AuthorizationStatus;
 }
 
@@ -57,7 +57,7 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-function Property({authorizationStatus}: PropertyProps): JSX.Element {
+function Offer({authorizationStatus}: OfferProps): JSX.Element {
   return (
     <div className="page">
       <Header />
@@ -321,4 +321,4 @@ function Property({authorizationStatus}: PropertyProps): JSX.Element {
   );
 }
 
-export default Property;
+export default Offer;
