@@ -15,4 +15,27 @@ enum AuthorizationStatus {
   NoAuth = 'NO_AUTH'
 }
 
-export {Setting, AppRoute, AuthorizationStatus};
+const RatingStar = [
+  {
+    mark: 5,
+    title: 'perfect',
+  },
+  {
+    mark: 4,
+    title: 'good',
+  },
+  {
+    mark: 3,
+    title: 'not bad',
+  },
+  {
+    mark: 2,
+    title: 'badly',
+  },
+  {
+    mark: 1,
+    title: 'terribly',
+  },
+];
+
+export {Setting, AppRoute, AuthorizationStatus, RatingStar};
