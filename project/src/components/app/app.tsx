@@ -1,4 +1,4 @@
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {AppRoute, AuthorizationStatus} from '../../consts';
 
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Main from '../main/main';
@@ -6,40 +6,28 @@ import Favorites from '../favorites/favorites';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
 import Login from '../login/login';
 import MainEmpty from '../main-empty/main-empty';
-import Property from '../property/property';
+import Offer from '../offer/offer';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
+import {OffersType} from '../../types/offerInfo';
+import {Reviews} from '../../types/reviews';
 
 type AppProps = {
-  countRentalOffers: number
+  countRentalOffers: number,
+  countFavorites: number,
+  offers: OffersType,
+  reviews: Reviews
 }
 
-function App({countRentalOffers}: AppProps): JSX.Element {
+function App({countRentalOffers, countFavorites, offers, reviews}: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path={AppRoute.Main}>
-          <Main countRentalOffers={countRentalOffers} />
-        </Route>
-
         <Route exact path={AppRoute.Login} component={Login} />
-
-        <PrivateRoute
-          exact
-          path={AppRoute.Favorites}
-          render={() => <Favorites />}
-          authorizationStatus={AuthorizationStatus.NoAuth}
-        />
-
-        <Route exact path={AppRoute.Property}>
-          <Property authorizationStatus={AuthorizationStatus.NoAuth} />
-        </Route>
-
-        <Route exact path={AppRoute.FavoritesEmpty} component={FavoritesEmpty} />
-        <Route exact path={AppRoute.MainEmpty} component={MainEmpty} />
-
+        <Route exact path={AppRoute.Offer} render={() =>(<Offer authorizationStatus={AuthorizationStatus.Auth} offer={offers[0]} offers={offers.slice(0,3)} reviews={reviews} />)} />
+        <Route exact path={AppRoute.Main} render={() => (countRentalOffers ? <Main countRentalOffers={countRentalOffers} offers={offers} /> : <MainEmpty />)} />
+        <PrivateRoute exact path={AppRoute.Favorites} render={() => countFavorites ? <Favorites offers={offers} /> : <FavoritesEmpty />} authorizationStatus={AuthorizationStatus.Auth} />
         <Route component={ErrorNotFound} />
-
       </Switch>
     </BrowserRouter>
   );

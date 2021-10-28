@@ -1,12 +1,14 @@
-import CitiesPlaceCard from '../cities-place-card/cities-place-card';
 import Header from '../header/header';
 import Locations from '../locations/locations';
+import CardList from '../card-list/card-list';
+import {OffersType} from '../../types/offerInfo';
 
 type MainProps = {
-  countRentalOffers: number
+  countRentalOffers: number,
+  offers: OffersType
 }
 
-function Main({countRentalOffers}: MainProps): JSX.Element {
+function Main({countRentalOffers, offers}: MainProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -36,11 +38,7 @@ function Main({countRentalOffers}: MainProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <CitiesPlaceCard />
-                <CitiesPlaceCard />
-                <CitiesPlaceCard />
-                <CitiesPlaceCard />
-                <CitiesPlaceCard />
+                <CardList offers={offers} blockClass="cities__place-card" elementClass="cities__image-wrapper"/>
               </div>
             </section>
             <div className="cities__right-section">
