@@ -24,7 +24,7 @@ function App({countRentalOffers, countFavorites, offers, reviews}: AppProps): JS
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Login} component={Login} />
-        <Route exact path={AppRoute.Offer} render={() =>(<Offer authorizationStatus={AuthorizationStatus.Auth} offer={offers[0]} offers={offers.slice(0,3)} reviews={reviews} />)} />
+        <Route exact path={AppRoute.Offer} render={(props) =>(<Offer authorizationStatus={AuthorizationStatus.Auth} offers={offers} reviews={reviews} {...props} />)} />
         <Route exact path={AppRoute.Main} render={() => (countRentalOffers ? <Main countRentalOffers={countRentalOffers} offers={offers} /> : <MainEmpty />)} />
         <PrivateRoute exact path={AppRoute.Favorites} render={() => countFavorites ? <Favorites offers={offers} /> : <FavoritesEmpty />} authorizationStatus={AuthorizationStatus.Auth} />
         <Route component={ErrorNotFound} />

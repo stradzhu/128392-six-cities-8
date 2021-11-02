@@ -9,14 +9,10 @@ type CardListProp = {
 }
 
 function CardList({offers, blockClass, elementClass}: CardListProp): JSX.Element {
-  const [activeCard, setActiveCard] = useState(0);
+  const [activeCard, setActiveCard] = useState(0); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   return (
     <>
-      <div style={{position: 'relative', zIndex: 2, color: 'white', pointerEvents: 'none'}}>
-        <h1 style={{position: 'absolute', left: 10, whiteSpace: 'nowrap'}}>Для теста: activeCard = {activeCard}</h1>
-      </div>
-
       {offers.map((offer)=>(
         <Card key={offer.id}
           offer={offer}
