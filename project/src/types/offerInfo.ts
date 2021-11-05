@@ -5,11 +5,10 @@ type HostType = {
   description: string
 }
 
-type CityType = {
+export type CityType = {
   location: {
     latitude: number,
     longitude: number,
-    zoom: number
   },
   title: string
 }

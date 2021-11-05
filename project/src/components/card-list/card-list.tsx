@@ -1,16 +1,14 @@
-import React, {useState} from 'react';
-import {OffersType} from '../../types/offerInfo';
+import {CityType, OffersType} from '../../types/offerInfo';
 import Card from '../card/card';
 
 type CardListProp = {
+  onCardListItemHover?: (city?: CityType) => void, // необязательный аргумент, т.к. CardList есть внутри Offer, он отображает места поблизости и там при неведении не нужно подсвечивать карту
   offers: OffersType,
   blockClass: string,
   elementClass: string
 }
 
-function CardList({offers, blockClass, elementClass}: CardListProp): JSX.Element {
-  const [activeCard, setActiveCard] = useState(0); // eslint-disable-line @typescript-eslint/no-unused-vars
-
+function CardList({onCardListItemHover, offers, blockClass, elementClass}: CardListProp): JSX.Element {
   return (
     <>
       {offers.map((offer)=>(
@@ -18,8 +16,10 @@ function CardList({offers, blockClass, elementClass}: CardListProp): JSX.Element
           offer={offer}
           blockClass={blockClass}
           elementClass={elementClass}
-          onMouseEnter = {() => setActiveCard(offer.id)}
-          onMouseLeave = {() => setActiveCard(0)}
+          {...(onCardListItemHover && {
+            onMouseEnter: () => onCardListItemHover(offer.city),
+            onMouseLeave: () => onCardListItemHover(),
+          })}
         />
       ))}
     </>

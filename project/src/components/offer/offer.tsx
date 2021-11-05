@@ -10,7 +10,7 @@ type OfferProps = {
   authorizationStatus: AuthorizationStatus,
   offers: OffersType,
   reviews: Reviews,
-  match: any // кажется, это мне нужно. Но я вообще не вьехал, что, откуда и куда https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
+  match: any, // кажется, это мне нужно. Но я вообще не я не понял, как правильно типизировать этот пропс https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
 }
 
 function ReviewsForm(): JSX.Element {
@@ -52,7 +52,7 @@ function ReviewsForm(): JSX.Element {
           }
         }
       />
-      <div className="reviews__button-wrapper">props.match params.id
+      <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>

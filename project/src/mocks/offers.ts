@@ -86,11 +86,10 @@ const offers: OffersType = [
     },
     city: {
       location: {
-        latitude: 35.216370,
-        longitude: 28.168895,
-        zoom: 12,
+        latitude: 52.3909553943508,
+        longitude: 4.85309666406198,
       },
-      title: 'Berlin',
+      title: 'Amsterdam',
     },
   },
   {
@@ -178,11 +177,10 @@ const offers: OffersType = [
     },
     city: {
       location: {
-        latitude: 35.216370,
-        longitude: 28.168895,
-        zoom: 12,
+        latitude: 52.369553943508,
+        longitude: 4.85309666406198,
       },
-      title: 'Carlson',
+      title: 'Amsterdam',
     },
   },
   {
@@ -270,11 +268,10 @@ const offers: OffersType = [
     },
     city: {
       location: {
-        latitude: 35.216370,
-        longitude: 28.168895,
-        zoom: 12,
+        latitude: 52.3909553943508,
+        longitude: 4.929309666406198,
       },
-      title: 'Carlson',
+      title: 'Amsterdam',
     },
   },
   {
@@ -362,11 +359,10 @@ const offers: OffersType = [
     },
     city: {
       location: {
-        latitude: 35.216370,
-        longitude: 28.168895,
-        zoom: 12,
+        latitude: 52.3809553943508,
+        longitude: 4.939309666406198,
       },
-      title: 'Carlson',
+      title: 'Amsterdam',
     },
   },
 ];
