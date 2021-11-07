@@ -1,16 +1,18 @@
 import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
-import {OffersType} from '../../types/offerInfo';
+import {CityType, OffersType} from '../../types/offer-info';
 import {Reviews} from '../../types/reviews';
 import CardList from '../card-list/card-list';
 import React, {useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
+import ReviewsList from '../reviews-list/reviews-list';
+import Map from '../map/map';
 
 type OfferProps = {
   authorizationStatus: AuthorizationStatus,
   offers: OffersType,
   reviews: Reviews,
-  match: any, // кажется, это мне нужно. Но я вообще не я не понял, как правильно типизировать этот пропс https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
+  match: any, // @TODO исправить в следующих коммитах https://github.com/htmlacademy-react/128392-six-cities-8/pull/6
 }
 
 function ReviewsForm(): JSX.Element {
@@ -64,10 +66,15 @@ function ReviewsForm(): JSX.Element {
 
 function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.Element {
   const offer = offers.find((item) => String(item.id) === match.params.id);
+  const [selectedCity, setSelectedCity] = useState<CityType | undefined>(undefined);
 
   if (!offer) {
     return <ErrorNotFound />;
   }
+
+  const onCardListItemHover = (city?: CityType) => {
+    setSelectedCity(city);
+  };
 
   return (
     <div className="page">
@@ -152,51 +159,20 @@ function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.E
                 <div className="property__description" dangerouslySetInnerHTML={{__html: offer.host.description}} />
               </div>
               <section className="property__reviews reviews">
-                {reviews.length > 0 &&
-                  <>
-                    <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                    <ul className="reviews__list">
-                      {reviews.map((review)=>(
-                        <li key={review.id} className="reviews__item">
-                          <div className="reviews__user user">
-                            <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                              <img className="reviews__avatar user__avatar" src={review.avatar} width="54" height="54" alt={review.name} />
-                            </div>
-                            <span className="reviews__user-name">
-                              {review.name}
-                            </span>
-                          </div>
-                          <div className="reviews__info">
-                            <div className="reviews__rating rating">
-                              <div className="reviews__stars rating__stars">
-                                <span style={{width: `${review.rating * 100 / 5  }%`}} />
-                                <span className="visually-hidden">Rating</span>
-                              </div>
-                            </div>
-                            <p className="reviews__text">
-                              {review.text}
-                            </p>
-                            <time className="reviews__time" dateTime={new Date(review.date).toLocaleString('en-US')}>
-                              {new Date(review.date).toLocaleString('en-US', {year: 'numeric', month: 'long'})}
-                            </time>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </>}
-
+                {reviews.length > 0 && <ReviewsList reviews={reviews} />}
                 {authorizationStatus === AuthorizationStatus.Auth && ReviewsForm()}
-
               </section>
             </div>
           </div>
-          <section className="property__map map" />
+          <section className="property__map map">
+            <Map points={offers.slice(0, 3).map(({city}) => city)} selectedCity={selectedCity} />
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <CardList offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
+              <CardList onCardListItemHover={onCardListItemHover} offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
             </div>
           </section>
         </div>

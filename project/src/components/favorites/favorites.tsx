@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {OffersType, OfferType} from '../../types/offerInfo';
+import {OffersType, OfferType} from '../../types/offer-info';
 
 type FavoritesProp = {
   offers: OffersType
