@@ -11,7 +11,9 @@ function ErrorNotFound(): JSX.Element {
               <b className="cities__status">Страница не найдена</b>
               <p className="cities__status-description">
                 Возможно она была, но исчезла из-за катастрофически быстрого сжатия под воздействием гравитационных сил. Но это ещё не точно.
-                <hr />
+              </p>
+              <hr />
+              <p className="cities__status-description">
                 &copy; <a href="https://htmlacademy.ru/404" target="_blank" rel="noreferrer">HTML Academy</a>
               </p>
             </div>

@@ -38,4 +38,8 @@ const RatingStar = [
   },
 ];
 
-export {Setting, AppRoute, AuthorizationStatus, RatingStar};
+const URL_MARKER_DEFAULT = '/img/pin.svg';
+
+const URL_MARKER_CURRENT = '/img/pin-active.svg';
+
+export {Setting, AppRoute, AuthorizationStatus, RatingStar, URL_MARKER_DEFAULT, URL_MARKER_CURRENT};

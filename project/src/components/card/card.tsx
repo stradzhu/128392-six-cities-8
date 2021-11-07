@@ -5,8 +5,8 @@ type CardProps = {
   offer: OfferType,
   blockClass: string,
   elementClass: string,
-  onMouseEnter: () => void,
-  onMouseLeave: () => void,
+  onMouseEnter?: () => void,
+  onMouseLeave?: () => void,
 }
 
 /* эх, "удобная" разметка http://joxi.ru/gmvKkjKhewq832 поэтому я передаю 2 дополнительных css класса */

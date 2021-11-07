@@ -6,15 +6,11 @@ type FavoritesProp = {
   offers: OffersType
 }
 
-type FavoritesLocationsProp = {
-  offers: OffersType
-}
-
 type FavoritesCardProp = {
   offer: OfferType
 }
 
-function FavoritesLocations({offers}: FavoritesLocationsProp): JSX.Element {
+function FavoritesLocations({offers}: FavoritesProp): JSX.Element {
   const citiesList = Array.from(new Set(offers.map(({city})=>city.title))).sort();
 
   return (

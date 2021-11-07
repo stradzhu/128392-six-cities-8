@@ -1,24 +1,24 @@
 import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
-import {OfferType, OffersType} from '../../types/offerInfo';
+import {OffersType} from '../../types/offerInfo';
 import {Reviews} from '../../types/reviews';
 import CardList from '../card-list/card-list';
 import React, {useState} from 'react';
+import ErrorNotFound from '../error-not-found/error-not-found';
 
 type OfferProps = {
   authorizationStatus: AuthorizationStatus,
-  offer: OfferType,
   offers: OffersType,
   reviews: Reviews,
+  match: any, // кажется, это мне нужно. Но я вообще не я не понял, как правильно типизировать этот пропс https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
 }
 
 function ReviewsForm(): JSX.Element {
-  const [review, setReview] = useState('');
-  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState(''); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [rating, setRating] = useState(0); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   return (
     <form className="reviews__form form" action="#" method="post">
-      <h2>Для теста: review = {review}; rating = {rating}</h2>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {RatingStar.map(({mark, title})=>(
@@ -62,7 +62,13 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-function Offer({authorizationStatus, offers, offer, reviews}: OfferProps): JSX.Element {
+function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.Element {
+  const offer = offers.find((item) => String(item.id) === match.params.id);
+
+  if (!offer) {
+    return <ErrorNotFound />;
+  }
+
   return (
     <div className="page">
       <Header />
@@ -190,7 +196,7 @@ function Offer({authorizationStatus, offers, offer, reviews}: OfferProps): JSX.E
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <CardList offers={offers} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
+              <CardList offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
             </div>
           </section>
         </div>
