@@ -9,7 +9,7 @@ import MainEmpty from '../main-empty/main-empty';
 import Offer from '../offer/offer';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
-import {OffersType} from '../../types/offerInfo';
+import {OffersType} from '../../types/offer-info';
 import {Reviews} from '../../types/reviews';
 
 type AppProps = {

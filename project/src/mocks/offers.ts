@@ -1,4 +1,4 @@
-import {OffersType} from '../types/offerInfo';
+import {OffersType} from '../types/offer-info';
 
 const offers: OffersType = [
   {

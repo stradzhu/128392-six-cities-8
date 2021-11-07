@@ -1,6 +1,6 @@
 import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
-import {CityType, OffersType} from '../../types/offerInfo';
+import {CityType, OffersType} from '../../types/offer-info';
 import {Reviews} from '../../types/reviews';
 import CardList from '../card-list/card-list';
 import React, {useState} from 'react';
@@ -12,7 +12,7 @@ type OfferProps = {
   authorizationStatus: AuthorizationStatus,
   offers: OffersType,
   reviews: Reviews,
-  match: any, // кажется, это мне нужно. Но я вообще не я не понял, как правильно типизировать этот пропс https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
+  match: any, // @TODO исправить в следующих коммитах https://github.com/htmlacademy-react/128392-six-cities-8/pull/6
 }
 
 function ReviewsForm(): JSX.Element {

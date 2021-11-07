@@ -1,4 +1,4 @@
-import {CityType} from '../../types/offerInfo';
+import {CityType} from '../../types/offer-info';
 import {useRef, useEffect} from 'react';
 import useMap from '../../hooks/useMap';
 import { Icon, Marker } from 'leaflet';

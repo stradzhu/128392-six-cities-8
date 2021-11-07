@@ -2,7 +2,7 @@ import Header from '../header/header';
 import Locations from '../locations/locations';
 import CardList from '../card-list/card-list';
 import Map from '../map/map';
-import {CityType, OffersType} from '../../types/offerInfo';
+import {CityType, OffersType} from '../../types/offer-info';
 import {useState} from 'react';
 
 type MainProps = {
