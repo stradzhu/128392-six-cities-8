@@ -1,77 +1,35 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {OffersType, OfferType} from '../../types/offer-info';
+import {OffersType} from '../../types/offer-info';
+import {State} from '../../types/state';
+import {connect, ConnectedProps} from 'react-redux';
+import FavoritesEmpty from '../favorites-empty/favorites-empty';
+import {Dispatch} from 'redux';
+import {Actions} from '../../types/action';
+import {toggleFavorites} from '../../store/action';
+import {getRating} from '../../utils';
 
-type FavoritesProp = {
-  offers: OffersType
-}
+const mapStateToProps = ({offers}: State) => ({
+  offers,
+});
 
-type FavoritesCardProp = {
-  offer: OfferType
-}
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  onClickToggleFavorites: (id: number) => {
+    dispatch(toggleFavorites(id));
+  },
+});
 
-function FavoritesLocations({offers}: FavoritesProp): JSX.Element {
-  const citiesList = Array.from(new Set(offers.map(({city})=>city.title))).sort();
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
-  return (
-    <>
-      {citiesList.map((city) => (
-        <li key={city} className="favorites__locations-items">
-          <div className="favorites__locations locations locations--current">
-            <div className="locations__item">
-              <Link className="locations__item-link" to="/">
-                <span>{city}</span>
-              </Link>
-            </div>
-          </div>
-          <div className="favorites__places">
-            {offers.filter(({city: {title}}) => title === city).map((offer) => (
-              <FavoritesCard key={offer.id} offer={offer}/>
-            ))}
-          </div>
-        </li>
-      ))}
-    </>
-  );
-}
+function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof connector>): JSX.Element {
+  const favoritesOffers: OffersType = offers.filter(({isFavorite}) => isFavorite);
 
-function FavoritesCard({offer}: FavoritesCardProp): JSX.Element {
-  return (
-    <article className="favorites__card place-card">
-      <div className="favorites__image-wrapper place-card__image-wrapper">
-        <Link to={`/offer/${offer.id}`}>
-          <img className="place-card__image" src={offer.images[0].path} width="150" height="110" alt="" />
-        </Link>
-      </div>
-      <div className="favorites__card-info place-card__info">
-        <div className="place-card__price-wrapper">
-          <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.price}</b>
-            <span className="place-card__price-text">&#47;&nbsp;night</span>
-          </div>
-          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark" />
-            </svg>
-            <span className="visually-hidden">In bookmarks</span>
-          </button>
-        </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{width: `${offer.rating * 100 / 5  }%`}} />
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
-        <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>Nice, cozy, warm big bed apartment</Link>
-        </h2>
-        <p className="place-card__type">{offer.type}</p>
-      </div>
-    </article>
-  );
-}
+  if (!favoritesOffers.length) {
+    return <FavoritesEmpty/>;
+  }
 
-function Favorites({offers}: FavoritesProp): JSX.Element {
+  const citiesList = Array.from(new Set(favoritesOffers.map(({city}) => city.title))).sort();
+
   return (
     <div className="page">
       <Header />
@@ -80,7 +38,52 @@ function Favorites({offers}: FavoritesProp): JSX.Element {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              <FavoritesLocations offers={offers} />
+              {citiesList.map((city) => (
+                <li key={city} className="favorites__locations-items">
+                  <div className="favorites__locations locations locations--current">
+                    <div className="locations__item">
+                      <Link className="locations__item-link" to="/">
+                        <span>{city}</span>
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="favorites__places">
+                    {favoritesOffers.filter(({city: {title}}) => title === city).map((offer) => (
+                      <article key={offer.id} className="favorites__card place-card">
+                        <div className="favorites__image-wrapper place-card__image-wrapper">
+                          <Link to={`/offer/${offer.id}`}>
+                            <img className="place-card__image" src={offer.images[0].path} width="150" height="110" alt="" />
+                          </Link>
+                        </div>
+                        <div className="favorites__card-info place-card__info">
+                          <div className="place-card__price-wrapper">
+                            <div className="place-card__price">
+                              <b className="place-card__price-value">&euro;{offer.price}</b>
+                              <span className="place-card__price-text">&#47;&nbsp;night</span>
+                            </div>
+                            <button onClick={() => onClickToggleFavorites(offer.id)} className="place-card__bookmark-button place-card__bookmark-button--active button" type="button" >
+                              <svg className="place-card__bookmark-icon" width="18" height="19">
+                                <use xlinkHref="#icon-bookmark" />
+                              </svg>
+                              <span className="visually-hidden">In bookmarks</span>
+                            </button>
+                          </div>
+                          <div className="place-card__rating rating">
+                            <div className="place-card__stars rating__stars">
+                              <span style={{width: getRating(offer.rating)}} />
+                              <span className="visually-hidden">Rating</span>
+                            </div>
+                          </div>
+                          <h2 className="place-card__name">
+                            <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
+                          </h2>
+                          <p className="place-card__type">{offer.type}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </li>
+              ))}
             </ul>
           </section>
         </div>
@@ -94,4 +97,5 @@ function Favorites({offers}: FavoritesProp): JSX.Element {
   );
 }
 
-export default Favorites;
+export {Favorites};
+export default connector(Favorites);

@@ -1,34 +1,33 @@
 import {AppRoute, AuthorizationStatus} from '../../consts';
-
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
-import FavoritesEmpty from '../favorites-empty/favorites-empty';
 import Login from '../login/login';
 import Offer from '../offer/offer';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
-import {OffersType} from '../../types/offer-info';
-import {Reviews} from '../../types/reviews';
+import {State} from '../../types/state';
+import {connect, ConnectedProps} from 'react-redux';
 
-type AppProps = {
-  countFavorites: number,
-  offers: OffersType,
-  reviews: Reviews
-}
+const mapStateToProps = ({authorizationStatus}: State) => ({
+  authorizationStatus,
+});
 
-function App({countFavorites, offers, reviews}: AppProps): JSX.Element {
+const connector = connect(mapStateToProps);
+
+function App({authorizationStatus}: ConnectedProps<typeof connector>): JSX.Element {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path={AppRoute.Login} component={Login} />
-        <Route exact path={AppRoute.Offer} render={(props) =>(<Offer authorizationStatus={AuthorizationStatus.Auth} offers={offers} reviews={reviews} {...props} />)} />
-        <Route exact path={AppRoute.Main} render={() => <Main offers={offers} />} />
-        <PrivateRoute exact path={AppRoute.Favorites} render={() => countFavorites ? <Favorites offers={offers} /> : <FavoritesEmpty />} authorizationStatus={AuthorizationStatus.Auth} />
+        <PrivateRoute exact allowedRender={authorizationStatus !== AuthorizationStatus.Auth} path={AppRoute.Login} render={() => <Login/>} renderProhibited={() => <Redirect to='/'/>} />
+        <Route exact path={AppRoute.Offer} render={(props) =>(<Offer {...props} />)} />
+        <Route exact path={AppRoute.Main} component={Main} />
+        <PrivateRoute exact allowedRender={authorizationStatus === AuthorizationStatus.Auth} path={AppRoute.Favorites} render={() => <Favorites/>} renderProhibited={() => <Redirect to={AppRoute.Login}/>} />
         <Route component={ErrorNotFound} />
       </Switch>
     </BrowserRouter>
   );
 }
 
-export default App;
+export {App};
+export default connector(App);

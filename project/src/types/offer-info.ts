@@ -21,6 +21,7 @@ export type OfferType = {
     path: string
   }[],
   isPremium: boolean,
+  isFavorite: boolean,
   price: number,
   rating: number,
   type: string,

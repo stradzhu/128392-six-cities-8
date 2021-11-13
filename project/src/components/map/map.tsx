@@ -1,7 +1,7 @@
 import {CityType} from '../../types/offer-info';
 import {useRef, useEffect} from 'react';
-import useMap from '../../hooks/useMap';
-import { Icon, Marker } from 'leaflet';
+import useMap from '../../hooks/use-map';
+import {Icon, Marker} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../consts';
 
@@ -28,24 +28,42 @@ function Map({points, selectedCity}: MapProp): JSX.Element {
   const map = useMap(mapRef, points);
 
   useEffect(() => {
+    const markers: Marker[] = [];
     if (!map) {
       return;
     }
 
-    points.forEach((point) => {
+    const centerMap = {lat: 0, lng: 0};
+
+    points.forEach(({location: {latitude, longitude}}) => {
+      centerMap.lat += latitude;
+      centerMap.lng += longitude;
+
       const marker = new Marker({
-        lat: point.location.latitude,
-        lng: point.location.longitude,
+        lat: latitude,
+        lng: longitude,
       });
 
       marker.setIcon(
         selectedCity !== undefined
-        && point.location.latitude === selectedCity.location.latitude
-        && point.location.longitude === selectedCity.location.longitude
+        && latitude === selectedCity.location.latitude
+        && longitude === selectedCity.location.longitude
           ? currentCustomIcon
           : defaultCustomIcon,
       ).addTo(map);
+
+      markers.push(marker);
     });
+
+    centerMap.lat /= points.length;
+    centerMap.lng /= points.length;
+    map.setView(centerMap);
+
+    return () => {
+      if (map) {
+        markers.forEach((marker) => map.removeLayer(marker));
+      }
+    };
 
   }, [map, points, selectedCity]);
 

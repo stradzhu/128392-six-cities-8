@@ -2,7 +2,7 @@ import {CityType, OffersType} from '../../types/offer-info';
 import Card from '../card/card';
 
 type CardListProp = {
-  onCardListItemHover?: (city?: CityType) => void, // необязательный аргумент, т.к. CardList есть внутри Offer, он отображает места поблизости и там при неведении не нужно подсвечивать карту
+  onCardListItemHover: (city?: CityType) => void,
   offers: OffersType,
   blockClass: string,
   elementClass: string
@@ -16,10 +16,7 @@ function CardList({onCardListItemHover, offers, blockClass, elementClass}: CardL
           offer={offer}
           blockClass={blockClass}
           elementClass={elementClass}
-          {...(onCardListItemHover && {
-            onMouseEnter: () => onCardListItemHover(offer.city),
-            onMouseLeave: () => onCardListItemHover(),
-          })}
+          onCardListItemHover={onCardListItemHover}
         />
       ))}
     </>

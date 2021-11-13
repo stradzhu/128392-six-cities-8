@@ -1,8 +1,3 @@
-const Setting = {
-  COUNT_RENTAL_OFFERS: 789,
-  COUNT_FAVORITES: 123,
-};
-
 enum AppRoute {
   Main = '/',
   Login = '/login',
@@ -53,4 +48,13 @@ const ALL_CITY_LIST = [
 
 const DEFAULT_CITY = ALL_CITY_LIST[0];
 
-export {Setting, AppRoute, AuthorizationStatus, RatingStar, URL_MARKER_DEFAULT, URL_MARKER_CURRENT, DEFAULT_CITY, ALL_CITY_LIST};
+enum SortTypes {
+  POPULAR = 'Popular',
+  PRICE_DOWN = 'Price: low to high',
+  PRICE_UP = 'Price: high to low',
+  RATING_DOWN = 'Top rated first',
+}
+
+const DEFAULT_SORT_TYPE = SortTypes.POPULAR;
+
+export {AppRoute, AuthorizationStatus, RatingStar, URL_MARKER_DEFAULT, URL_MARKER_CURRENT, DEFAULT_CITY, ALL_CITY_LIST, SortTypes, DEFAULT_SORT_TYPE};
