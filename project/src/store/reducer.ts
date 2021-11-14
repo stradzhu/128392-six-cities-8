@@ -13,7 +13,7 @@ const initialState: State = {
   authorizationStatus: authorizationStatus,
 };
 
-const reducer = (state: State = initialState, action: Actions): State => {
+export const reducer = (state: State = initialState, action: Actions): State => {
   switch (action.type) {
     case ActionType.ChangeCity:
       return {...state, activeCity: action.payload};
@@ -34,5 +34,3 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return state;
   }
 };
-
-export {reducer};

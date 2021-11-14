@@ -1,6 +1,6 @@
 import {OffersType} from '../types/offer-info';
 
-const offers: OffersType = [
+export const offers: OffersType = [
   {
     id: 1,
     title: 'id 1, Amsterdam, Beautiful & luxurious studio at great location',
@@ -646,5 +646,3 @@ const offers: OffersType = [
     },
   },
 ];
-
-export {offers};

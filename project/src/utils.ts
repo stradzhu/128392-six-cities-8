@@ -2,7 +2,7 @@ import {OffersType} from './types/offer-info';
 import {SortTypes} from './consts';
 import {Reviews} from './types/reviews';
 
-const getSortedOffers = (offers: OffersType, SortType: SortTypes): OffersType => {
+export const getSortedOffers = (offers: OffersType, SortType: SortTypes): OffersType => {
   switch (SortType) {
     case SortTypes.PRICE_UP: {
       return offers.slice().sort((offerA, offerB) => offerB.price - offerA.price);
@@ -19,8 +19,6 @@ const getSortedOffers = (offers: OffersType, SortType: SortTypes): OffersType =>
   }
 };
 
-const getRating = (rating: number): string => `${Math.round(rating) * 100 / 5}%`;
+export const getRating = (rating: number): string => `${Math.round(rating) * 100 / 5}%`;
 
-const getActualReviews = (reviews: Reviews): Reviews => reviews.sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date)).slice(0, 10);
-
-export {getSortedOffers, getRating, getActualReviews};
+export const getActualReviews = (reviews: Reviews): Reviews => reviews.sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date)).slice(0, 10);

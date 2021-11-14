@@ -1,6 +1,6 @@
 import {Reviews} from '../types/reviews';
 
-const reviews: Reviews = [
+export const reviews: Reviews = [
   {
     id: 1,
     name: 'Max',
@@ -98,5 +98,3 @@ const reviews: Reviews = [
     date: '2021-01-09T23:55:00.000Z',
   },
 ];
-
-export {reviews};
