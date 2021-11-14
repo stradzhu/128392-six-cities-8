@@ -1,4 +1,4 @@
-import {SortTypes} from '../consts';
+import {changeCity, changeSortType, toggleFavorites, signOut} from '../store/action';
 
 export enum ActionType {
   ChangeCity = 'main/changeCity',
@@ -7,26 +7,8 @@ export enum ActionType {
   SignOut = 'signOut'
 }
 
-type ChangeCityAction = {
-  type: ActionType.ChangeCity,
-  payload: string,
-};
-
-type ChangeSortTypeAction = {
-  type: ActionType.ChangeSortType,
-  payload: SortTypes,
-};
-
-type ToggleFavoritesAction = {
-  type: ActionType.ToggleFavorites,
-  payload: number,
-};
-
-type SignOut = {
-  type: ActionType.SignOut
-};
-
-export type Actions = ChangeCityAction
-  | ChangeSortTypeAction
-  | ToggleFavoritesAction
-  | SignOut;
+export type Actions =
+  | ReturnType<typeof changeCity>
+  | ReturnType<typeof changeSortType>
+  | ReturnType<typeof toggleFavorites>
+  | ReturnType<typeof signOut>;
