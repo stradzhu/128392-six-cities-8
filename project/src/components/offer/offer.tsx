@@ -1,23 +1,33 @@
 import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
-import {CityType, OffersType} from '../../types/offer-info';
-import {Reviews} from '../../types/reviews';
+import {CityType} from '../../types/offer-info';
 import CardList from '../card-list/card-list';
 import React, {useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
+import {State} from '../../types/state';
+import {connect, ConnectedProps} from 'react-redux';
+import {getActualReviews, getRating} from '../../utils';
 
 type OfferProps = {
-  authorizationStatus: AuthorizationStatus,
-  offers: OffersType,
-  reviews: Reviews,
   match: any, // @TODO исправить в следующих коммитах https://github.com/htmlacademy-react/128392-six-cities-8/pull/6
 }
 
+const mapStateToProps = ({offers, reviews, authorizationStatus}: State) => ({
+  offers,
+  reviews,
+  authorizationStatus,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & OfferProps;
+
 function ReviewsForm(): JSX.Element {
-  const [review, setReview] = useState(''); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const [rating, setRating] = useState(0); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [, setReview] = useState('');
+  const [, setRating] = useState(0);
 
   return (
     <form className="reviews__form form" action="#" method="post">
@@ -64,7 +74,7 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.Element {
+function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponentProps): JSX.Element {
   const offer = offers.find((item) => String(item.id) === match.params.id);
   const [selectedCity, setSelectedCity] = useState<CityType | undefined>(undefined);
 
@@ -75,6 +85,8 @@ function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.E
   const onCardListItemHover = (city?: CityType) => {
     setSelectedCity(city);
   };
+
+  const actualReviews = getActualReviews(reviews);
 
   return (
     <div className="page">
@@ -110,7 +122,7 @@ function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.E
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: `${offer.rating * 100 / 5  }%`}} />
+                  <span style={{width: getRating(offer.rating)}} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
@@ -159,7 +171,7 @@ function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.E
                 <div className="property__description" dangerouslySetInnerHTML={{__html: offer.host.description}} />
               </div>
               <section className="property__reviews reviews">
-                {reviews.length > 0 && <ReviewsList reviews={reviews} />}
+                {reviews.length > 0 && <ReviewsList reviews={actualReviews} />}
                 {authorizationStatus === AuthorizationStatus.Auth && ReviewsForm()}
               </section>
             </div>
@@ -181,4 +193,5 @@ function Offer({authorizationStatus, offers, reviews, match}: OfferProps): JSX.E
   );
 }
 
-export default Offer;
+export {Offer};
+export default connector(Offer);

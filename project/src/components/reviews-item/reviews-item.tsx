@@ -1,5 +1,6 @@
 import React from 'react';
 import {Review} from '../../types/reviews';
+import {getRating} from '../../utils';
 
 type ReviewsItemProp = {
   review: Review
@@ -19,7 +20,7 @@ function ReviewsItem({review}: ReviewsItemProp): JSX.Element {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: `${review.rating * 100 / 5  }%`}} />
+            <span style={{width: getRating(review.rating)}} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
