@@ -1,6 +1,7 @@
 import {OffersType} from './offer-info';
 import {Reviews} from './reviews';
 import {AuthorizationStatus, SortTypes} from '../consts';
+import {UserInfo} from './user-info';
 
 export type State = {
   activeCity: string,
@@ -8,4 +9,6 @@ export type State = {
   currentSortType: SortTypes,
   offers: OffersType,
   reviews: Reviews,
+  isDataLoaded: boolean,
+  userInfo: UserInfo | null
 }

@@ -1,6 +1,6 @@
 import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
-import {CityType} from '../../types/offer-info';
+import {PointsType} from '../../types/offer-info';
 import CardList from '../card-list/card-list';
 import React, {useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
@@ -9,9 +9,12 @@ import Map from '../map/map';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
 import {getActualReviews, getRating} from '../../utils';
+import {Dispatch} from 'redux';
+import {Actions} from '../../types/action';
+import {toggleFavorites} from '../../store/action';
 
 type OfferProps = {
-  match: any, // @TODO исправить в следующих коммитах https://github.com/htmlacademy-react/128392-six-cities-8/pull/6
+  offerId: string
 }
 
 const mapStateToProps = ({offers, reviews, authorizationStatus}: State) => ({
@@ -20,7 +23,13 @@ const mapStateToProps = ({offers, reviews, authorizationStatus}: State) => ({
   authorizationStatus,
 });
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  onClickToggleFavorites: (id: number) => {
+    dispatch(toggleFavorites(id));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & OfferProps;
@@ -74,17 +83,15 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponentProps): JSX.Element {
-  const offer = offers.find((item) => String(item.id) === match.params.id);
-  const [selectedCity, setSelectedCity] = useState<CityType | undefined>(undefined);
+function Offer({authorizationStatus, offers, reviews, offerId, onClickToggleFavorites}: ConnectedComponentProps): JSX.Element {
+  const offer = offers.find((item) => String(item.id) === offerId);
 
   if (!offer) {
     return <ErrorNotFound />;
   }
 
-  const onCardListItemHover = (city?: CityType) => {
-    setSelectedCity(city);
-  };
+  const mapPoints: PointsType = offers.slice(0, 3);
+  mapPoints.push({location: offer.location, id: offer.id});
 
   const actualReviews = getActualReviews(reviews);
 
@@ -95,9 +102,9 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {offer.images.map(({id, path})=>(
-                <div className="property__image-wrapper" key={id}>
-                  <img className="property__image" src={path} alt="" />
+              {offer.images.map((image) => (
+                <div className="property__image-wrapper" key={image}>
+                  <img className="property__image" src={image} alt=""/>
                 </div>
               ))}
             </div>
@@ -108,12 +115,13 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
                 <div className="property__mark">
                   <span>Premium</span>
                 </div>}
-
               <div className="property__name-wrapper">
                 <h1 className="property__name">
                   {offer.title}
                 </h1>
-                <button className="property__bookmark-button button" type="button">
+                <button className={`property__bookmark-button ${offer.isFavorite && 'property__bookmark-button--active'} button`}
+                  type="button" onClick={() => onClickToggleFavorites(offer.id)}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
@@ -134,7 +142,7 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
                   {offer.type}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                  {offer.bedroomsCount} Bedrooms
+                  {offer.bedrooms} Bedrooms
                 </li>
                 <li className="property__feature property__feature--adults">
                   Max {offer.maxAdults} adults
@@ -147,9 +155,9 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                  {offer.inside.map(({id, title})=>(
-                    <li className="property__inside-item" key={id}>
-                      {title}
+                  {offer.goods.map((good)=>(
+                    <li className="property__inside-item" key={good}>
+                      {good}
                     </li>
                   ))}
                 </ul>
@@ -168,7 +176,9 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
                       Pro
                     </span>}
                 </div>
-                <div className="property__description" dangerouslySetInnerHTML={{__html: offer.host.description}} />
+                <div className="property__description">
+                  <p className="property__text">{offer.description}</p>
+                </div>
               </div>
               <section className="property__reviews reviews">
                 {reviews.length > 0 && <ReviewsList reviews={actualReviews} />}
@@ -177,14 +187,14 @@ function Offer({authorizationStatus, offers, reviews, match}: ConnectedComponent
             </div>
           </div>
           <section className="property__map map">
-            <Map points={offers.slice(0, 3).map(({city}) => city)} selectedCity={selectedCity} />
+            <Map points={mapPoints} hoveredOfferId={offer.id} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <CardList onCardListItemHover={onCardListItemHover} offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
+              <CardList offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
             </div>
           </section>
         </div>

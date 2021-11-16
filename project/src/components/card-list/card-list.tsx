@@ -1,8 +1,8 @@
-import {CityType, OffersType} from '../../types/offer-info';
+import {OffersType} from '../../types/offer-info';
 import Card from '../card/card';
 
 type CardListProp = {
-  onCardListItemHover: (city?: CityType) => void,
+  onCardListItemHover?: (id?: number) => void,
   offers: OffersType,
   blockClass: string,
   elementClass: string
@@ -16,7 +16,10 @@ function CardList({onCardListItemHover, offers, blockClass, elementClass}: CardL
           offer={offer}
           blockClass={blockClass}
           elementClass={elementClass}
-          onCardListItemHover={onCardListItemHover}
+          {...(onCardListItemHover && {
+            onMouseEnter: () => onCardListItemHover(offer.id),
+            onMouseLeave: () => onCardListItemHover(),
+          })}
         />
       ))}
     </>

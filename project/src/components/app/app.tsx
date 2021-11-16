@@ -4,25 +4,36 @@ import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import Login from '../login/login';
 import Offer from '../offer/offer';
+import LoadingScreen from '../loading-screen/loading-screen';
 import ErrorNotFound from '../error-not-found/error-not-found';
-import PrivateRoute from '../private-route/private-route';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
+import {isCheckedAuth} from '../../utils';
 
-const mapStateToProps = ({authorizationStatus}: State) => ({
+
+const mapStateToProps = ({authorizationStatus, isDataLoaded}: State) => ({
   authorizationStatus,
+  isDataLoaded,
 });
 
 const connector = connect(mapStateToProps);
 
-function App({authorizationStatus}: ConnectedProps<typeof connector>): JSX.Element {
+function App({authorizationStatus, isDataLoaded}: ConnectedProps<typeof connector>): JSX.Element {
+  const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
+
+  if (!isCheckedAuth || !isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   return (
     <BrowserRouter>
       <Switch>
-        <PrivateRoute exact allowedRender={authorizationStatus !== AuthorizationStatus.Auth} path={AppRoute.Login} render={() => <Login/>} renderProhibited={() => <Redirect to='/'/>} />
-        <Route exact path={AppRoute.Offer} render={(props) =>(<Offer {...props} />)} />
+        <Route exact path={AppRoute.Login} render={() => (isAuthenticated ? <Redirect to='/'/> : <Login/>)} />
+        <Route exact path={AppRoute.Offer} render={(props) =>(<Offer offerId={props.match.params.id} />)} />
         <Route exact path={AppRoute.Main} component={Main} />
-        <PrivateRoute exact allowedRender={authorizationStatus === AuthorizationStatus.Auth} path={AppRoute.Favorites} render={() => <Favorites/>} renderProhibited={() => <Redirect to={AppRoute.Login}/>} />
+        <Route exact path={AppRoute.Favorites} render={() => (isAuthenticated ? <Favorites/> : <Redirect to={AppRoute.Login}/>)} />
         <Route component={ErrorNotFound} />
       </Switch>
     </BrowserRouter>

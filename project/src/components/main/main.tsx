@@ -2,7 +2,7 @@ import Header from '../header/header';
 import CityList from '../city-list/city-list';
 import CardList from '../card-list/card-list';
 import Map from '../map/map';
-import {CityType} from '../../types/offer-info';
+import {PointsType} from '../../types/offer-info';
 import {useState} from 'react';
 import {Dispatch} from 'redux';
 import {connect, ConnectedProps} from 'react-redux';
@@ -28,13 +28,13 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 function Main({offers, onClickCity, activeCity, currentSortType}: ConnectedProps<typeof connector>): JSX.Element {
 
-  const [selectedCity, setSelectedCity] = useState<CityType | undefined>(undefined);
+  const [hoveredOfferId, setHoveredOfferId] = useState<number | undefined>(undefined);
 
-  const onCardListItemHover = (city?: CityType) => {
-    setSelectedCity(city);
+  const onCardListItemHover = (id?: number) => {
+    setHoveredOfferId(id);
   };
 
-  const filteredOffers = offers.filter(({city: {title}}) => title === activeCity);
+  const filteredOffers = offers.filter(({city: {name}}) => name === activeCity);
   const sortedOffers = getSortedOffers(filteredOffers, currentSortType);
 
   if (sortedOffers.length === 0) {
@@ -82,7 +82,7 @@ function Main({offers, onClickCity, activeCity, currentSortType}: ConnectedProps
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map points={sortedOffers.map(({city}) => city)} selectedCity={selectedCity} />
+                <Map points={sortedOffers.map(({location, id}) => ({location, id})) as PointsType} hoveredOfferId={hoveredOfferId} />
               </section>
             </div>
           </div>
