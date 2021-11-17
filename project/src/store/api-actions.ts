@@ -7,7 +7,6 @@ import {AuthData} from '../types/auth-data';
 import {OffersType} from '../types/offer-info';
 import {adaptOffersToClient, adaptUserInfoToClient} from '../utils';
 
-
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<OffersType>(APIRoute.Hotels);
@@ -32,7 +31,7 @@ export const loginAction = ({login: email, password}: AuthData): ThunkActionResu
       saveToken(data.token);
       dispatch(setAuthorization(AuthorizationStatus.Auth));
       dispatch(setUserInfo(adaptUserInfoToClient(data)));
-      dispatch(redirectToRoute(AppRoute.Main));
+      dispatch(redirectToRoute(AppRoute.Root));
     } catch {
       toast.info(AUTH_LOGIN_FAIL_MESSAGE);
     }

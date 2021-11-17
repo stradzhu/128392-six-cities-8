@@ -1,14 +1,16 @@
 import {AppRoute, AuthorizationStatus} from '../../consts';
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
+import {Route, Router, Switch} from 'react-router-dom';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import Login from '../login/login';
 import Offer from '../offer/offer';
-import LoadingScreen from '../loading-screen/loading-screen';
+import Loader from '../loader/loader';
 import ErrorNotFound from '../error-not-found/error-not-found';
+import PrivateRoute from '../private-route/private-route';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
+import browserHistory from '../../browser-history';
 
 
 const mapStateToProps = ({authorizationStatus, isDataLoaded}: State) => ({
@@ -23,20 +25,20 @@ function App({authorizationStatus, isDataLoaded}: ConnectedProps<typeof connecto
 
   if (!isCheckedAuth || !isDataLoaded) {
     return (
-      <LoadingScreen />
+      <Loader />
     );
   }
 
   return (
-    <BrowserRouter>
+    <Router history={browserHistory}>
       <Switch>
-        <Route exact path={AppRoute.Login} render={() => (isAuthenticated ? <Redirect to='/'/> : <Login/>)} />
+        <Route exact path={AppRoute.Root} component={Main} />
         <Route exact path={AppRoute.Offer} render={(props) =>(<Offer offerId={props.match.params.id} />)} />
-        <Route exact path={AppRoute.Main} component={Main} />
-        <Route exact path={AppRoute.Favorites} render={() => (isAuthenticated ? <Favorites/> : <Redirect to={AppRoute.Login}/>)} />
+        <PrivateRoute exact path={AppRoute.Favorites} component={() => <Favorites/>} redirectTo={AppRoute.Login} renderAllowed={isAuthenticated} />
+        <PrivateRoute exact path={AppRoute.Login} component={() => <Login/>} redirectTo={AppRoute.Root} renderAllowed={!isAuthenticated} />
         <Route component={ErrorNotFound} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 }
 
