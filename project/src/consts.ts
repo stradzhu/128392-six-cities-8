@@ -7,7 +7,8 @@ export enum AppRoute {
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
-  NoAuth = 'NO_AUTH'
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
 }
 
 export const RatingStar = [
@@ -55,4 +56,14 @@ export enum SortTypes {
   RATING_DOWN = 'Top rated first',
 }
 
+export enum APIRoute {
+  Hotels = '/hotels',
+  Login = '/login',
+  Logout = '/logout',
+}
+
 export const DEFAULT_SORT_TYPE = SortTypes.POPULAR;
+
+export const AUTH_CHECK_FAIL_MESSAGE = 'Не забудьте авторизоваться';
+
+export const AUTH_LOGIN_FAIL_MESSAGE = 'Ошибка в логине/пароле';

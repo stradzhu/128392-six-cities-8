@@ -1,5 +1,7 @@
 import {ActionType} from '../types/action';
-import {SortTypes} from '../consts';
+import {AppRoute, AuthorizationStatus, SortTypes} from '../consts';
+import {OffersType} from '../types/offer-info';
+import {UserInfo} from '../types/user-info';
 
 export const changeCity = (city: string) => ({
   type: ActionType.ChangeCity,
@@ -16,6 +18,26 @@ export const toggleFavorites = (id: number) => ({
   payload: id,
 } as const);
 
-export const signOut = () => ({
-  type: ActionType.SignOut,
+export const loadOffers = (offers: OffersType) => ({
+  type: ActionType.LoadOffers,
+  payload: offers,
+} as const);
+
+export const setAuthorization = (authStatus: AuthorizationStatus) => ({
+  type: ActionType.SetAuthorization,
+  payload: authStatus,
+} as const);
+
+export const requireLogout = () => ({
+  type: ActionType.RequireLogout,
+} as const);
+
+export const redirectToRoute = (url: AppRoute) => ({
+  type: ActionType.RedirectToRoute,
+  payload: url,
+} as const);
+
+export const setUserInfo = (user: UserInfo) => ({
+  type: ActionType.SetUserInfo,
+  payload: user,
 } as const);

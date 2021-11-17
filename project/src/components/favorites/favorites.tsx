@@ -28,7 +28,7 @@ function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof conne
     return <FavoritesEmpty/>;
   }
 
-  const citiesList = Array.from(new Set(favoritesOffers.map(({city}) => city.title))).sort();
+  const citiesList = Array.from(new Set(favoritesOffers.map(({city}) => city.name))).sort();
 
   return (
     <div className="page">
@@ -48,11 +48,11 @@ function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof conne
                     </div>
                   </div>
                   <div className="favorites__places">
-                    {favoritesOffers.filter(({city: {title}}) => title === city).map((offer) => (
+                    {favoritesOffers.filter(({city: {name}}) => name === city).map((offer) => (
                       <article key={offer.id} className="favorites__card place-card">
                         <div className="favorites__image-wrapper place-card__image-wrapper">
                           <Link to={`/offer/${offer.id}`}>
-                            <img className="place-card__image" src={offer.images[0].path} width="150" height="110" alt="" />
+                            <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt="" />
                           </Link>
                         </div>
                         <div className="favorites__card-info place-card__info">

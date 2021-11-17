@@ -1,4 +1,4 @@
-import {CityType} from '../../types/offer-info';
+import {PointsType} from '../../types/offer-info';
 import {useRef, useEffect} from 'react';
 import useMap from '../../hooks/use-map';
 import {Icon, Marker} from 'leaflet';
@@ -18,46 +18,35 @@ const currentCustomIcon = new Icon({
 });
 
 type MapProp = {
-  points: CityType[],
-  selectedCity?: CityType,
+  points: PointsType,
+  hoveredOfferId: number | undefined,
 }
 
-function Map({points, selectedCity}: MapProp): JSX.Element {
-
+function Map({points, hoveredOfferId}: MapProp): JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, points);
+  const map = useMap(mapRef);
 
   useEffect(() => {
     const markers: Marker[] = [];
+    const pointsFitBounds: [number, number][] = [];
+
     if (!map) {
       return;
     }
 
-    const centerMap = {lat: 0, lng: 0};
-
-    points.forEach(({location: {latitude, longitude}}) => {
-      centerMap.lat += latitude;
-      centerMap.lng += longitude;
-
+    points.forEach(({location: {latitude, longitude}, id}) => {
       const marker = new Marker({
         lat: latitude,
         lng: longitude,
       });
 
-      marker.setIcon(
-        selectedCity !== undefined
-        && latitude === selectedCity.location.latitude
-        && longitude === selectedCity.location.longitude
-          ? currentCustomIcon
-          : defaultCustomIcon,
-      ).addTo(map);
-
+      marker.setIcon(hoveredOfferId === id ? currentCustomIcon : defaultCustomIcon).addTo(map);
       markers.push(marker);
+
+      pointsFitBounds.push([latitude, longitude]);
     });
 
-    centerMap.lat /= points.length;
-    centerMap.lng /= points.length;
-    map.setView(centerMap);
+    map.fitBounds(pointsFitBounds, {padding: [20, 20]});
 
     return () => {
       if (map) {
@@ -65,7 +54,7 @@ function Map({points, selectedCity}: MapProp): JSX.Element {
       }
     };
 
-  }, [map, points, selectedCity]);
+  }, [map, points, hoveredOfferId]);
 
   return <div style={{height: '100%'}} ref={mapRef} />;
 }

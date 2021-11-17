@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
-import {CityType, OfferType} from '../../types/offer-info';
+import {OfferType} from '../../types/offer-info';
 import {Dispatch} from 'redux';
 import {Actions} from '../../types/action';
 import {toggleFavorites} from '../../store/action';
@@ -10,7 +10,8 @@ type CardProps = {
   offer: OfferType,
   blockClass: string,
   elementClass: string,
-  onCardListItemHover: (city?: CityType) => void,
+  onMouseEnter?: () => void,
+  onMouseLeave?: () => void,
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
@@ -25,16 +26,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & CardProps;
 
 /* эх, "удобная" разметка http://joxi.ru/gmvKkjKhewq832 поэтому я передаю 2 дополнительных css класса */
-function Card({offer, blockClass, elementClass, onCardListItemHover, onClickToggleFavorites}: ConnectedComponentProps): JSX.Element {
+function Card({offer, blockClass, elementClass, onMouseEnter, onMouseLeave, onClickToggleFavorites}: ConnectedComponentProps): JSX.Element {
   return (
-    <article className={`${blockClass} place-card`} onMouseEnter={() => onCardListItemHover(offer.city)} onMouseLeave={() => onCardListItemHover()}>
+    <article className={`${blockClass} place-card`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {offer.isPremium &&
         <div className="place-card__mark">
           <span>Premium</span>
         </div>}
       <div className={`${elementClass} place-card__image-wrapper`}>
         <Link to={`/offer/${offer.id}`}>
-          <img className="place-card__image" src={offer.images[0].path} width="260" height="200" alt="" />
+          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="" />
         </Link>
       </div>
       <div className="place-card__info">
