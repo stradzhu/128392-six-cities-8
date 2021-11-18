@@ -1,6 +1,6 @@
 import './style.css';
 
-function LoadingScreen(): JSX.Element {
+function Loader(): JSX.Element {
   return (
     <div className="loading">
       <div className="loading__block">
@@ -14,4 +14,4 @@ function LoadingScreen(): JSX.Element {
   );
 }
 
-export default LoadingScreen;
+export default Loader;

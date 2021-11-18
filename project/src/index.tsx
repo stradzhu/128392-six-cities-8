@@ -11,6 +11,7 @@ import {setAuthorization} from './store/action';
 import {fetchOffersAction, checkAuthAction} from './store/api-actions';
 import {ThunkAppDispatch} from './types/action';
 import {AuthorizationStatus} from './consts';
+import {redirect} from './store/middlewares/redirect';
 
 const api = createAPI(  () => store.dispatch(setAuthorization(AuthorizationStatus.NoAuth)));
 
@@ -19,13 +20,13 @@ const composeEnhancers = composeWithDevTools({
   traceLimit: 25,
 });
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk.withExtraArgument(api))));
+const store = createStore(reducer, composeEnhancers(
+  applyMiddleware(thunk.withExtraArgument(api)),
+  applyMiddleware(redirect),
+));
 
-// setTimeout чтобы лучше увидеть прелоадер :)
-setTimeout(() => {
-  (store.dispatch as ThunkAppDispatch)(checkAuthAction());
-  (store.dispatch as ThunkAppDispatch)(fetchOffersAction());
-}, 2500);
+(store.dispatch as ThunkAppDispatch)(checkAuthAction());
+(store.dispatch as ThunkAppDispatch)(fetchOffersAction());
 
 ReactDOM.render(
   <React.StrictMode>
