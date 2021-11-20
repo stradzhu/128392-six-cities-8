@@ -11,7 +11,7 @@ type CardListProp = {
 function CardList({onCardListItemHover, offers, blockClass, elementClass}: CardListProp): JSX.Element {
   return (
     <>
-      {offers.map((offer)=>(
+      {offers.map((offer) => (
         <Card key={offer.id}
           offer={offer}
           blockClass={blockClass}

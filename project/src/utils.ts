@@ -1,6 +1,6 @@
 import {OffersType, OfferType} from './types/offer-info';
-import {AuthorizationStatus, SortTypes} from './consts';
-import {Reviews} from './types/reviews';
+import {AuthorizationStatus, ReviewSetting, SortTypes} from './consts';
+import {Review, Reviews} from './types/reviews';
 import {UserInfo} from './types/user-info';
 
 export const getSortedOffers = (offers: OffersType, SortType: SortTypes): OffersType => {
@@ -22,38 +22,44 @@ export const getSortedOffers = (offers: OffersType, SortType: SortTypes): Offers
 
 export const getRating = (rating: number): string => `${Math.round(rating) * 100 / 5}%`;
 
-export const getActualReviews = (reviews: Reviews): Reviews => reviews.sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date)).slice(0, 10);
+export const getActualReviews = (reviews: Reviews): Reviews => (
+  reviews.sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date))
+    .slice(0, ReviewSetting.MAX_COUNT_PER_PAGE));
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus !== AuthorizationStatus.Unknown;
 
-export const adaptOffersToClient = (offersFromBackend: OffersType): OffersType => (
-  offersFromBackend.map((offerFromBackend): OfferType => {
-    const adaptedOffer = Object.assign(
-      {},
-      offerFromBackend,
-      {
-        host: {
-          avatarUrl: offerFromBackend.host.avatar_url,
-          isPro: offerFromBackend.host.is_pro,
-        },
-        isFavorite: offerFromBackend.is_favorite,
-        isPremium: offerFromBackend.is_premium,
-        maxAdults: offerFromBackend.max_adults,
-        previewImage: offerFromBackend.preview_image,
+export const adaptOfferToClient = (offerFromBackend: OfferType): OfferType => {
+  const adaptedOffer = Object.assign(
+    {},
+    offerFromBackend,
+    {
+      host: {
+        avatarUrl: offerFromBackend.host.avatar_url,
+        isPro: offerFromBackend.host.is_pro,
       },
-    ) as OfferType;
+      isFavorite: offerFromBackend.is_favorite,
+      isPremium: offerFromBackend.is_premium,
+      maxAdults: offerFromBackend.max_adults,
+      previewImage: offerFromBackend.preview_image,
+    },
+  ) as OfferType;
 
-    adaptedOffer.type = adaptedOffer.type.charAt(0).toUpperCase() + adaptedOffer.type.slice(1); // делает первый символ заглавным
+  adaptedOffer.type = adaptedOffer.type.charAt(0).toUpperCase() + adaptedOffer.type.slice(1); // делает первый символ заглавным
 
-    delete adaptedOffer.host.avatar_url;
-    delete adaptedOffer.host.is_pro;
-    delete adaptedOffer.is_favorite;
-    delete adaptedOffer.is_premium;
-    delete adaptedOffer.max_adults;
-    delete adaptedOffer.preview_image;
+  delete adaptedOffer.host.avatar_url;
+  delete adaptedOffer.host.is_pro;
+  delete adaptedOffer.is_favorite;
+  delete adaptedOffer.is_premium;
+  delete adaptedOffer.max_adults;
+  delete adaptedOffer.preview_image;
 
-    return adaptedOffer;
-  })
+  return adaptedOffer;
+};
+
+export const adaptOffersToClient = (offersFromBackend: OffersType): OffersType => (
+  offersFromBackend.map((offerFromBackend) => (
+    adaptOfferToClient(offerFromBackend)
+  ))
 );
 
 export const adaptUserInfoToClient = (userInfo: UserInfo): UserInfo => {
@@ -71,3 +77,27 @@ export const adaptUserInfoToClient = (userInfo: UserInfo): UserInfo => {
 
   return adaptedUserInfo;
 };
+
+export const adaptCommentToClient = (review: Review): Review => {
+  const adaptedReview = Object.assign(
+    {},
+    review,
+    {
+      user: {
+        avatarUrl: review.user.avatar_url,
+        isPro: review.user.is_pro,
+      },
+    },
+  ) as Review;
+
+  delete adaptedReview.user.avatar_url;
+  delete adaptedReview.user.is_pro;
+
+  return adaptedReview;
+};
+
+export const adaptCommentsToClient = (reviews: Reviews): Reviews => (
+  reviews.map((review) => (
+    adaptCommentToClient(review)
+  ))
+);

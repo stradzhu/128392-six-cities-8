@@ -12,9 +12,8 @@ function CityList({activeCity, onClickCity}: CityListProps): JSX.Element {
       <ul className="locations__list tabs__list">
         {ALL_CITY_LIST.map((city) => (
           <li key={city} className="locations__item">
-            <Link onClick={() => {city !== activeCity && onClickCity(city);}}
-              className={`locations__item-link tabs__item ${city === activeCity ? 'tabs__item--active' : ''}`}
-              to="/"
+            <Link onClick={() => city !== activeCity && onClickCity(city)}
+              className={`locations__item-link tabs__item ${city === activeCity ? 'tabs__item--active' : ''}`} to="#"
             >
               <span>{city}</span>
             </Link>

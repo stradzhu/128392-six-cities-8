@@ -1,16 +1,15 @@
 import {useState} from 'react';
-import {Dispatch} from 'redux';
 import {connect, ConnectedProps} from 'react-redux';
 import {SortTypes} from '../../consts';
 import {State} from '../../types/state';
-import {Actions} from '../../types/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {changeSortType} from '../../store/action';
 
 const mapStateToProps = ({currentSortType}: State) => ({
   currentSortType,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
   onChangeSortType: (type: SortTypes) => {
     dispatch(changeSortType(type));
   },
@@ -38,16 +37,13 @@ function PlaceSorting({currentSortType, onChangeSortType}: PropsFromRedux): JSX.
       <span className="places__sorting-type" tabIndex={0} onClick={handleToggleSort}>
         {currentSortType}
         <svg className="places__sorting-arrow" width="7" height="4">
-          <use xlinkHref="#icon-arrow-select" />
+          <use xlinkHref="#icon-arrow-select"/>
         </svg>
       </span>
       <ul className={`places__options places__options--custom ${isOpenSort && 'places__options--opened'}`}>
         {Object.values(SortTypes).map((item) => (
-          <li
-            key={item}
-            className={`places__option ${currentSortType === item && 'places__option--active'}`}
-            tabIndex={0}
-            onClick={() => handleClickItemSort(item)}
+          <li key={item} className={`places__option ${currentSortType === item && 'places__option--active'}`}
+            tabIndex={0} onClick={() => handleClickItemSort(item)}
           >
             {item}
           </li>

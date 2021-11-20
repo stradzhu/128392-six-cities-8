@@ -1,38 +1,48 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {OffersType} from '../../types/offer-info';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
-import {Dispatch} from 'redux';
-import {Actions} from '../../types/action';
-import {toggleFavorites} from '../../store/action';
+import {ThunkAppDispatch} from '../../types/action';
 import {getRating} from '../../utils';
+import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/api-actions';
+import Loader from '../loader/loader';
+import React, {useEffect, useState} from 'react';
+import {AppRoute} from '../../consts';
 
-const mapStateToProps = ({offers}: State) => ({
-  offers,
+const mapStateToProps = ({favorites}: State) => ({
+  favorites,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onClickToggleFavorites: (id: number) => {
-    dispatch(toggleFavorites(id));
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onSetFavorite: (id: number, status: boolean) => {
+    dispatch(fetchSetFavoriteAction(id, status)).then(() => dispatch(fetchFavoritesAction()));
   },
+  onLoad: () => dispatch(fetchFavoritesAction()),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof connector>): JSX.Element {
-  const favoritesOffers: OffersType = offers.filter(({isFavorite}) => isFavorite);
+function Favorites({favorites, onSetFavorite, onLoad}: ConnectedProps<typeof connector>): JSX.Element {
+  const [isDataLoaded, setDataLoaded] = useState(false);
 
-  if (!favoritesOffers.length) {
+  useEffect(() => {
+    onLoad().then(() => setDataLoaded(true));
+  }, [onLoad]);
+
+  if (!isDataLoaded) {
+    return <Loader/>;
+  }
+
+  if (!favorites.length) {
     return <FavoritesEmpty/>;
   }
 
-  const citiesList = Array.from(new Set(favoritesOffers.map(({city}) => city.name))).sort();
+  const citiesList = Array.from(new Set(favorites.map(({city}) => city.name))).sort();
 
   return (
     <div className="page">
-      <Header />
+      <Header/>
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
@@ -42,17 +52,19 @@ function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof conne
                 <li key={city} className="favorites__locations-items">
                   <div className="favorites__locations locations locations--current">
                     <div className="locations__item">
-                      <Link className="locations__item-link" to="/">
+                      <Link className="locations__item-link" to="#">
                         <span>{city}</span>
                       </Link>
                     </div>
                   </div>
                   <div className="favorites__places">
-                    {favoritesOffers.filter(({city: {name}}) => name === city).map((offer) => (
+                    {favorites.filter(({city: {name}}) => name === city).map((offer) => (
                       <article key={offer.id} className="favorites__card place-card">
                         <div className="favorites__image-wrapper place-card__image-wrapper">
                           <Link to={`/offer/${offer.id}`}>
-                            <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt="" />
+                            <img className="place-card__image" src={offer.previewImage} width="150" height="110"
+                              alt=""
+                            />
                           </Link>
                         </div>
                         <div className="favorites__card-info place-card__info">
@@ -61,16 +73,18 @@ function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof conne
                               <b className="place-card__price-value">&euro;{offer.price}</b>
                               <span className="place-card__price-text">&#47;&nbsp;night</span>
                             </div>
-                            <button onClick={() => onClickToggleFavorites(offer.id)} className="place-card__bookmark-button place-card__bookmark-button--active button" type="button" >
+                            <button onClick={() => onSetFavorite(offer.id, !offer.isFavorite)}
+                              className="place-card__bookmark-button place-card__bookmark-button--active button" type="button"
+                            >
                               <svg className="place-card__bookmark-icon" width="18" height="19">
-                                <use xlinkHref="#icon-bookmark" />
+                                <use xlinkHref="#icon-bookmark"/>
                               </svg>
                               <span className="visually-hidden">In bookmarks</span>
                             </button>
                           </div>
                           <div className="place-card__rating rating">
                             <div className="place-card__stars rating__stars">
-                              <span style={{width: getRating(offer.rating)}} />
+                              <span style={{width: getRating(offer.rating)}}/>
                               <span className="visually-hidden">Rating</span>
                             </div>
                           </div>
@@ -89,8 +103,8 @@ function Favorites({offers, onClickToggleFavorites}: ConnectedProps<typeof conne
         </div>
       </main>
       <footer className="footer container">
-        <Link className="footer__logo-link" to="/">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
+        <Link className="footer__logo-link" to={AppRoute.Root}>
+          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33"/>
         </Link>
       </footer>
     </div>

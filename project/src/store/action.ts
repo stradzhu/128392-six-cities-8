@@ -1,7 +1,8 @@
 import {ActionType} from '../types/action';
 import {AppRoute, AuthorizationStatus, SortTypes} from '../consts';
-import {OffersType} from '../types/offer-info';
+import {OffersType, OfferType} from '../types/offer-info';
 import {UserInfo} from '../types/user-info';
+import {Reviews} from '../types/reviews';
 
 export const changeCity = (city: string) => ({
   type: ActionType.ChangeCity,
@@ -13,9 +14,14 @@ export const changeSortType = (type: SortTypes) => ({
   payload: type,
 } as const);
 
-export const toggleFavorites = (id: number) => ({
-  type: ActionType.ToggleFavorites,
-  payload: id,
+export const setFavorite = (id: number, status: boolean) => ({
+  type: ActionType.SetFavorite,
+  payload: {id, status},
+} as const);
+
+export const setFavoriteInOffer = (id: number, status: boolean) => ({
+  type: ActionType.SetFavoriteInOffer,
+  payload: {id, status},
 } as const);
 
 export const loadOffers = (offers: OffersType) => ({
@@ -41,3 +47,24 @@ export const setUserInfo = (user: UserInfo) => ({
   type: ActionType.SetUserInfo,
   payload: user,
 } as const);
+
+export const loadOfferById = (offer: OfferType | null) => ({
+  type: ActionType.LoadOfferById,
+  payload: offer,
+} as const);
+
+export const loadOfferComments = (reviews: Reviews) => ({
+  type: ActionType.LoadOfferComments,
+  payload: reviews,
+} as const);
+
+export const loadNearOffers = (offers: OffersType) => ({
+  type: ActionType.LoadNearOffers,
+  payload: offers,
+} as const);
+
+export const loadFavorites = (favorites: OffersType) => ({
+  type: ActionType.LoadFavorites,
+  payload: favorites,
+} as const);
+

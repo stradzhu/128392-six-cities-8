@@ -1,10 +1,19 @@
 import {Link} from 'react-router-dom';
-import {useRef, FormEvent} from 'react';
+import {FormEvent, useState, ChangeEvent} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {loginAction} from '../../store/api-actions';
 import {ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth-data';
 import Header from '../header/header';
+import {AppRoute} from '../../consts';
+
+type InputLoginForm = {
+  [key: string]: {
+    value: string,
+    isValid: boolean,
+    regex: string,
+  }
+}
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
   onSubmit(authData: AuthData) {
@@ -15,23 +24,46 @@ const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
 const connector = connect(null, mapDispatchToProps);
 
 function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
-  const loginRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [formState, setFormState] = useState<InputLoginForm>({
+    email: {
+      value: '',
+      isValid: false,
+      regex: '^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.+.[a-zA-Z]{2,4}$',
+    },
+    password: {
+      value: '',
+      isValid: false,
+      regex: '^(?=.*[0-9])(?=.*[a-zA-Zа-яА-Я~!@#$%^&*()Ё"№;%:?*_+-=])([a-zA-Zа-яА-Я0-9~!@#$%^&*()Ё"№;%:?*_+-=]+)$',
+    },
+  });
+
+  const handleChange = ({target: {name, value}}: ChangeEvent<HTMLInputElement>) => {
+    const regExp = new RegExp(formState[name].regex);
+    const isValid = regExp.test(value);
+
+    setFormState({
+      ...formState,
+      [name]: {
+        ...formState[name],
+        value,
+        isValid,
+      },
+    });
+  };
+
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
-        login: loginRef.current.value,
-        password: passwordRef.current.value,
-      });
-    }
+    onSubmit({
+      login: formState.email.value,
+      password: formState.password.value,
+    });
   };
 
   return (
     <div className="page page--gray page--login">
-      <Header isPageLogin />
+      <Header isPageLogin/>
 
       <main className="page__main page__main--login">
         <div className="page__login-container container">
@@ -40,18 +72,26 @@ function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
             <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input ref={loginRef} className="login__input form__input" type="email" name="email" placeholder="Email" required/>
+                <input onChange={handleChange} value={formState.email.value} className="login__input form__input"
+                  type="email" name="email" placeholder="Email" required
+                />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input ref={passwordRef} className="login__input form__input" type="password" name="password" placeholder="Password" required />
+                <input onChange={handleChange} value={formState.password.value} className="login__input form__input"
+                  type="password" name="password" placeholder="Password" required
+                />
               </div>
-              <button className="login__submit form__submit button" type="submit">Sign in</button>
+              <button disabled={!formState.email.isValid || !formState.password.isValid}
+                className="login__submit form__submit button" type="submit"
+              >
+                Sign in
+              </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to="/">
+              <Link className="locations__item-link" to={AppRoute.Root}>
                 <span>Amsterdam</span>
               </Link>
             </div>
