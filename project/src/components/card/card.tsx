@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from 'react-redux';
 import {OfferType} from '../../types/offer-info';
 import {ThunkAppDispatch} from '../../types/action';
 import {getRating} from '../../utils';
-import {fetchSetFavoriteAction} from '../../store/api-actions';
+import {fetchSetFavoriteAction} from '../../store/actions/api-actions';
 
 type CardProps = {
   offer: OfferType,

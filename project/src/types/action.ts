@@ -1,6 +1,6 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
-import {State} from './state';
+import {RootState} from '../store/reducer/root-reducer';
 import {
   changeCity,
   changeSortType,
@@ -12,7 +12,7 @@ import {
   redirectToRoute,
   setUserInfo,
   loadOfferById, loadOfferComments, loadNearOffers, loadFavorites
-} from '../store/action';
+} from '../store/actions/action';
 
 export enum ActionType {
   ChangeCity = 'main/changeCity',
@@ -45,6 +45,6 @@ export type Actions =
   | ReturnType<typeof loadNearOffers>
   | ReturnType<typeof loadFavorites>;
 
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, AxiosInstance, Actions>;
 
-export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;
+export type ThunkAppDispatch = ThunkDispatch<RootState, AxiosInstance, Actions>;

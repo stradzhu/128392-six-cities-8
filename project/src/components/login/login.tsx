@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import {FormEvent, useState, ChangeEvent} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
-import {loginAction} from '../../store/api-actions';
+import {loginAction} from '../../store/actions/api-actions';
 import {ThunkAppDispatch} from '../../types/action';
 import {AuthData} from '../../types/auth-data';
 import Header from '../header/header';

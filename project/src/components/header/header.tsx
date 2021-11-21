@@ -1,15 +1,15 @@
 import {Link} from 'react-router-dom';
-import {State} from '../../types/state';
+import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import {AppRoute, AuthorizationStatus} from '../../consts';
 import {ThunkAppDispatch} from '../../types/action';
-import {logoutAction} from '../../store/api-actions';
+import {logoutAction} from '../../store/actions/api-actions';
 
 type HeaderProps = {
   isPageLogin?: boolean
 }
 
-const mapStateToProps = ({authorizationStatus, userInfo}: State) => ({
+const mapStateToProps = ({USER: {authorizationStatus, userInfo}}: RootState) => ({
   authorizationStatus,
   userInfo,
 });

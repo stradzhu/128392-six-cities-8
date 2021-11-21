@@ -1,12 +1,12 @@
 import {toast} from 'react-toastify';
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {RatingStar, ReviewSetting} from '../../consts';
-import {State} from '../../types/state';
+import {RootState} from '../../store/reducer/root-reducer';
 import {ThunkAppDispatch} from '../../types/action';
 import {connect, ConnectedProps} from 'react-redux';
-import {postCommentsAction} from '../../store/api-actions';
+import {postCommentsAction} from '../../store/actions/api-actions';
 
-const mapStateToProps = ({offer}: State) => ({
+const mapStateToProps = ({DATA: {offer}}: RootState) => ({
   offer,
 });
 

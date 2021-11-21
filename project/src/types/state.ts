@@ -3,14 +3,20 @@ import {Reviews} from './reviews';
 import {AuthorizationStatus, SortTypes} from '../consts';
 import {UserInfo} from './user-info';
 
-export type State = {
+export type MainState = {
   activeCity: string,
-  authorizationStatus: AuthorizationStatus
   currentSortType: SortTypes,
+}
+
+export type DataState = {
   offers: OffersType,
   favorites: OffersType,
   offer: OfferType | null,
   nearOffers: OffersType,
   reviews: Reviews,
+}
+
+export type UserState = {
+  authorizationStatus: AuthorizationStatus,
   userInfo: UserInfo | null
 }

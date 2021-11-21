@@ -1,16 +1,16 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {State} from '../../types/state';
+import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
 import {ThunkAppDispatch} from '../../types/action';
 import {getRating} from '../../utils';
-import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/api-actions';
+import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import React, {useEffect, useState} from 'react';
 import {AppRoute} from '../../consts';
 
-const mapStateToProps = ({favorites}: State) => ({
+const mapStateToProps = ({DATA: {favorites}}: RootState) => ({
   favorites,
 });
 

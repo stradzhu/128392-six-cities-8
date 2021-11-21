@@ -1,11 +1,11 @@
 import {useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {SortTypes} from '../../consts';
-import {State} from '../../types/state';
+import {RootState} from '../../store/reducer/root-reducer';
 import {ThunkAppDispatch} from '../../types/action';
-import {changeSortType} from '../../store/action';
+import {changeSortType} from '../../store/actions/action';
 
-const mapStateToProps = ({currentSortType}: State) => ({
+const mapStateToProps = ({MAIN: {currentSortType}}: RootState) => ({
   currentSortType,
 });
 

@@ -1,11 +1,12 @@
 import {toast} from 'react-toastify';
-import {ThunkActionResult} from '../types/action';
+import {ThunkActionResult} from '../../types/action';
 import {loadFavorites, loadNearOffers, loadOfferById, loadOfferComments, loadOffers, redirectToRoute,
   requireLogout, setAuthorization, setFavorite, setFavoriteInOffer, setUserInfo} from './action';
-import {dropToken, saveToken} from '../services/token';
-import {APIRoute, AppRoute, AuthorizationStatus, InformationMessages} from '../consts';
-import {AuthData} from '../types/auth-data';
-import {adaptCommentsToClient, adaptOffersToClient, adaptOfferToClient, adaptUserInfoToClient} from '../utils';
+import {dropToken, saveToken} from '../../services/token';
+import {APIRoute, AppRoute, AuthorizationStatus, InformationMessages} from '../../consts';
+import {AuthData} from '../../types/auth-data';
+import {adaptCommentsToClient, adaptOffersToClient, adaptOfferToClient, adaptUserInfoToClient} from '../../utils';
+import {NameSpace} from '../reducer/root-reducer';
 
 export const loginAction = ({login: email, password}: AuthData): ThunkActionResult =>
   async (dispatch, _getState, api) => {
@@ -80,7 +81,7 @@ export const fetchNearOffersAction = (id: string): ThunkActionResult =>
 
 export const fetchSetFavoriteAction = (id: number, status: boolean): ThunkActionResult =>
   async (dispatch, getState, api) => {
-    if (getState().authorizationStatus === AuthorizationStatus.Auth) {
+    if (getState()[NameSpace.user].authorizationStatus === AuthorizationStatus.Auth) {
       try {
         await api.post(`${APIRoute.Favorite}/${id}/${Number(status)}`);
         dispatch(setFavorite(id, status)); // обновит массив offers

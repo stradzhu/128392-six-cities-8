@@ -1,8 +1,8 @@
-import {ActionType} from '../types/action';
-import {AppRoute, AuthorizationStatus, SortTypes} from '../consts';
-import {OffersType, OfferType} from '../types/offer-info';
-import {UserInfo} from '../types/user-info';
-import {Reviews} from '../types/reviews';
+import {ActionType} from '../../types/action';
+import {AppRoute, AuthorizationStatus, SortTypes} from '../../consts';
+import {OffersType, OfferType} from '../../types/offer-info';
+import {UserInfo} from '../../types/user-info';
+import {Reviews} from '../../types/reviews';
 
 export const changeCity = (city: string) => ({
   type: ActionType.ChangeCity,

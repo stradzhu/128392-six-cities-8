@@ -6,9 +6,9 @@ import thunk from 'redux-thunk';
 import {createAPI} from './services/api';
 import {Provider} from 'react-redux';
 import App from './components/app/app';
-import {reducer} from './store/reducer';
-import {setAuthorization} from './store/action';
-import {checkAuthAction} from './store/api-actions';
+import {rootReducer} from './store/reducer/root-reducer';
+import {setAuthorization} from './store/actions/action';
+import {checkAuthAction} from './store/actions/api-actions';
 import {ThunkAppDispatch} from './types/action';
 import {AuthorizationStatus} from './consts';
 import {redirect} from './store/middlewares/redirect';
@@ -22,7 +22,7 @@ const composeEnhancers = composeWithDevTools({
   traceLimit: 25,
 });
 
-const store = createStore(reducer, composeEnhancers(
+const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk.withExtraArgument(api)),
   applyMiddleware(redirect),
 ));
