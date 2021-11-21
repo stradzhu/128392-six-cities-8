@@ -4,9 +4,10 @@ import {SortTypes} from '../../consts';
 import {RootState} from '../../store/reducer/root-reducer';
 import {ThunkAppDispatch} from '../../types/action';
 import {changeSortType} from '../../store/actions/action';
+import {getCurrentSortType} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({MAIN: {currentSortType}}: RootState) => ({
-  currentSortType,
+const mapStateToProps = (state: RootState) => ({
+  currentSortType: getCurrentSortType(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

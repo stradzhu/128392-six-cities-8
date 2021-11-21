@@ -11,9 +11,10 @@ import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
+import {getAuthorizationStatus} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({USER: {authorizationStatus}}: RootState) => ({
-  authorizationStatus,
+const mapStateToProps = (state: RootState) => ({
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const connector = connect(mapStateToProps);

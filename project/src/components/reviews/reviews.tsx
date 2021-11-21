@@ -5,10 +5,11 @@ import React from 'react';
 import {getActualReviews} from '../../utils';
 import {connect, ConnectedProps} from 'react-redux';
 import {AuthorizationStatus} from '../../consts';
+import {getAuthorizationStatus, getReviews} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({DATA: {reviews}, USER: {authorizationStatus}}: RootState) => ({
-  reviews,
-  authorizationStatus,
+const mapStateToProps = (state: RootState) => ({
+  reviews: getReviews(state),
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const connector = connect(mapStateToProps);

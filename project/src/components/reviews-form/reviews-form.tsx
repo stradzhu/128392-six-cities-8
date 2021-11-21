@@ -5,9 +5,10 @@ import {RootState} from '../../store/reducer/root-reducer';
 import {ThunkAppDispatch} from '../../types/action';
 import {connect, ConnectedProps} from 'react-redux';
 import {postCommentsAction} from '../../store/actions/api-actions';
+import {getOffer} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({DATA: {offer}}: RootState) => ({
-  offer,
+const mapStateToProps = (state: RootState) => ({
+  offer: getOffer(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

@@ -4,14 +4,15 @@ import {connect, ConnectedProps} from 'react-redux';
 import {AppRoute, AuthorizationStatus} from '../../consts';
 import {ThunkAppDispatch} from '../../types/action';
 import {logoutAction} from '../../store/actions/api-actions';
+import {getAuthorizationStatus, getUserInfo} from '../../store/selectors/selectors';
 
 type HeaderProps = {
   isPageLogin?: boolean
 }
 
-const mapStateToProps = ({USER: {authorizationStatus, userInfo}}: RootState) => ({
-  authorizationStatus,
-  userInfo,
+const mapStateToProps = (state: RootState) => ({
+  authorizationStatus: getAuthorizationStatus(state),
+  userInfo: getUserInfo(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

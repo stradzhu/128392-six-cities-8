@@ -16,16 +16,17 @@ import {
   fetchSetFavoriteAction
 } from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
+import {getAuthorizationStatus, getNearOffers, getOffer, getReviews} from '../../store/selectors/selectors';
 
 type OfferProps = {
   offerId: string
 }
 
-const mapStateToProps = ({DATA: {offer, reviews, nearOffers}, USER: {authorizationStatus}}: RootState) => ({
-  offer,
-  reviews,
-  nearOffers,
-  authorizationStatus,
+const mapStateToProps = (state: RootState) => ({
+  offer: getOffer(state),
+  reviews: getReviews(state),
+  nearOffers: getNearOffers(state),
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

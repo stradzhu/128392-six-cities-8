@@ -13,11 +13,12 @@ import {getSortedOffers} from '../../utils';
 import {fetchOffersAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import MainEmpty from '../main-empty/main-empty';
+import {getActiveCity, getCurrentSortType, getOffers} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({MAIN: {activeCity, currentSortType}, DATA: {offers}}: RootState) => ({
-  activeCity,
-  offers,
-  currentSortType,
+const mapStateToProps = (state: RootState) => ({
+  activeCity: getActiveCity(state),
+  offers: getOffers(state),
+  currentSortType: getCurrentSortType(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

@@ -9,9 +9,10 @@ import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/actions/
 import Loader from '../loader/loader';
 import React, {useEffect, useState} from 'react';
 import {AppRoute} from '../../consts';
+import {getFavorites} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({DATA: {favorites}}: RootState) => ({
-  favorites,
+const mapStateToProps = (state: RootState) => ({
+  favorites: getFavorites(state),
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
