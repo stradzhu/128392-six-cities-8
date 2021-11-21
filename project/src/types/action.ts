@@ -1,6 +1,6 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
-import {RootState} from '../store/reducer/root-reducer';
+import {State} from './state';
 import {
   changeCity, changeSortType, setFavorite, setFavoriteInOffer, loadOffers, setAuthorization, requireLogout,
   redirectToRoute, setUserInfo, loadOfferById, loadOfferComments, loadNearOffers, loadFavorites
@@ -37,6 +37,6 @@ export type Actions =
   | ReturnType<typeof loadNearOffers>
   | ReturnType<typeof loadFavorites>;
 
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, AxiosInstance, Actions>;
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
 
-export type ThunkAppDispatch = ThunkDispatch<RootState, AxiosInstance, Actions>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;

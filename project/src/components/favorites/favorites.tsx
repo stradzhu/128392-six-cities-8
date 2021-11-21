@@ -1,6 +1,5 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
 import {ThunkAppDispatch} from '../../types/action';
@@ -10,8 +9,9 @@ import Loader from '../loader/loader';
 import React, {useEffect, useState} from 'react';
 import {AppRoute} from '../../consts';
 import {getFavorites} from '../../store/selectors/selectors';
+import {State} from '../../types/state';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: State) => ({
   favorites: getFavorites(state),
 });
 

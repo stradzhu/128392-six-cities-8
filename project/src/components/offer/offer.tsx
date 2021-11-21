@@ -4,7 +4,6 @@ import CardList from '../card-list/card-list';
 import React, {useEffect, useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import Map from '../map/map';
-import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import {getRating} from '../../utils';
 import {ThunkAppDispatch} from '../../types/action';
@@ -12,12 +11,13 @@ import Loader from '../loader/loader';
 import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
 import {getAuthorizationStatus, getNearOffers, getOffer, getReviews} from '../../store/selectors/selectors';
+import {State} from '../../types/state';
 
 type OfferProps = {
   offerId: string
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: State) => ({
   offer: getOffer(state),
   reviews: getReviews(state),
   nearOffers: getNearOffers(state),

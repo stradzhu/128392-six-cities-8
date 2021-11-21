@@ -7,13 +7,13 @@ import Offer from '../offer/offer';
 import Loader from '../loader/loader';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
-import {RootState} from '../../store/reducer/root-reducer';
 import {connect, ConnectedProps} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
 import {getAuthorizationStatus} from '../../store/selectors/selectors';
+import {State} from '../../types/state';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: State) => ({
   authorizationStatus: getAuthorizationStatus(state),
 });
 

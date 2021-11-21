@@ -1,13 +1,13 @@
 import ReviewsList from '../reviews-list/reviews-list';
 import ReviewsForm from '../reviews-form/reviews-form';
-import {RootState} from '../../store/reducer/root-reducer';
 import React from 'react';
 import {getActualReviews} from '../../utils';
 import {connect, ConnectedProps} from 'react-redux';
 import {AuthorizationStatus} from '../../consts';
 import {getAuthorizationStatus, getReviews} from '../../store/selectors/selectors';
+import {State} from '../../types/state';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: State) => ({
   reviews: getReviews(state),
   authorizationStatus: getAuthorizationStatus(state),
 });

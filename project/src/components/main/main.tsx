@@ -5,7 +5,6 @@ import Map from '../map/map';
 import {PointsType} from '../../types/offer-info';
 import React, {useEffect, useState} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
-import {RootState} from '../../store/reducer/root-reducer';
 import {ThunkAppDispatch} from '../../types/action';
 import {changeCity} from '../../store/actions/action';
 import PlaceSorting from '../places-sorting/place-sorting';
@@ -14,8 +13,9 @@ import {fetchOffersAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import MainEmpty from '../main-empty/main-empty';
 import {getActiveCity, getCurrentSortType, getOffers} from '../../store/selectors/selectors';
+import {State} from '../../types/state';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: State) => ({
   activeCity: getActiveCity(state),
   offers: getOffers(state),
   currentSortType: getCurrentSortType(state),
