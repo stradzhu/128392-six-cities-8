@@ -40,10 +40,13 @@ export const fetchOffersAction = (): ThunkActionResult =>
 
 export const checkAuthAction = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    api.get(APIRoute.Login).then(({data}) => {
+    try {
+      const {data} = await api.get(APIRoute.Login);
       dispatch(setAuthorization(AuthorizationStatus.Auth));
       dispatch(setUserInfo(adaptUserInfoToClient(data)));
-    });
+    } catch {
+      toast.info(InformationMessages.AUTH_NO);
+    }
   };
 
 export const fetchOfferByIdAction = (id: string): ThunkActionResult =>
