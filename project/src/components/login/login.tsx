@@ -33,7 +33,7 @@ function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
     password: {
       value: '',
       isValid: false,
-      regex: '^(?=.*[0-9])(?=.*[a-zA-Zа-яА-Я~!@#$%^&*()Ё"№;%:?*_+-=])([a-zA-Zа-яА-Я0-9~!@#$%^&*()Ё"№;%:?*_+-=]+)$',
+      regex: '(?=.*[A-Za-zа-яА-Я])(?=.*[0-9])[A-Za-zа-яА-Я0-9]+',
     },
   });
 
