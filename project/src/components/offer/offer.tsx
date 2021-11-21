@@ -9,12 +9,7 @@ import {connect, ConnectedProps} from 'react-redux';
 import {getRating} from '../../utils';
 import {ThunkAppDispatch} from '../../types/action';
 import Loader from '../loader/loader';
-import {
-  fetchCommentsAction,
-  fetchNearOffersAction,
-  fetchOfferByIdAction,
-  fetchSetFavoriteAction
-} from '../../store/actions/api-actions';
+import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
 import {getAuthorizationStatus, getNearOffers, getOffer, getReviews} from '../../store/selectors/selectors';
 

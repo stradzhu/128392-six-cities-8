@@ -2,16 +2,8 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AxiosInstance} from 'axios';
 import {RootState} from '../store/reducer/root-reducer';
 import {
-  changeCity,
-  changeSortType,
-  setFavorite,
-  setFavoriteInOffer,
-  loadOffers,
-  setAuthorization,
-  requireLogout,
-  redirectToRoute,
-  setUserInfo,
-  loadOfferById, loadOfferComments, loadNearOffers, loadFavorites
+  changeCity, changeSortType, setFavorite, setFavoriteInOffer, loadOffers, setAuthorization, requireLogout,
+  redirectToRoute, setUserInfo, loadOfferById, loadOfferComments, loadNearOffers, loadFavorites
 } from '../store/actions/action';
 
 export enum ActionType {
