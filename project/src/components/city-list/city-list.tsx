@@ -19,6 +19,11 @@ function CityList({activeCity, onClickCity}: CityListProps): JSX.Element {
             </Link>
           </li>
         ))}
+        <li className="locations__item">
+          <Link onClick={() => onClickCity('Пустой')} className={`locations__item-link tabs__item ${'Пустой' === activeCity ? 'tabs__item--active' : ''}`} to="#">
+            <span>Пустой</span>
+          </Link>
+        </li>
       </ul>
     </section>
   );
