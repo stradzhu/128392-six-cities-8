@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import {UrlMarker} from '../../consts';
 
 const defaultCustomIcon = new Icon({
-  iconUrl: UrlMarker.CURRENT,
+  iconUrl: UrlMarker.DEFAULT,
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
