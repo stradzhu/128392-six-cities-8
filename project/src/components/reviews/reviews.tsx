@@ -2,19 +2,14 @@ import ReviewsList from '../reviews-list/reviews-list';
 import ReviewsForm from '../reviews-form/reviews-form';
 import React from 'react';
 import {getActualReviews} from '../../utils';
-import {connect, ConnectedProps} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {AuthorizationStatus} from '../../consts';
 import {getAuthorizationStatus, getReviews} from '../../store/selectors/selectors';
-import {State} from '../../types/state';
 
-const mapStateToProps = (state: State) => ({
-  reviews: getReviews(state),
-  authorizationStatus: getAuthorizationStatus(state),
-});
+function Reviews(): JSX.Element {
+  const reviews = useSelector(getReviews);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
-const connector = connect(mapStateToProps);
-
-function Reviews({reviews, authorizationStatus}: ConnectedProps<typeof connector>): JSX.Element {
   const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
   const actualReviews = getActualReviews(reviews);
 
@@ -26,5 +21,4 @@ function Reviews({reviews, authorizationStatus}: ConnectedProps<typeof connector
   );
 }
 
-export {Reviews};
-export default connector(Reviews);
+export default Reviews;

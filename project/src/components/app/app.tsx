@@ -7,19 +7,13 @@ import Offer from '../offer/offer';
 import Loader from '../loader/loader';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
-import {connect, ConnectedProps} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
 import {getAuthorizationStatus} from '../../store/selectors/selectors';
-import {State} from '../../types/state';
 
-const mapStateToProps = (state: State) => ({
-  authorizationStatus: getAuthorizationStatus(state),
-});
-
-const connector = connect(mapStateToProps);
-
-function App({authorizationStatus}: ConnectedProps<typeof connector>): JSX.Element {
+function App(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
   const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
 
   if (!isCheckedAuth) {
@@ -31,17 +25,12 @@ function App({authorizationStatus}: ConnectedProps<typeof connector>): JSX.Eleme
       <Switch>
         <Route exact path={AppRoute.Root} component={Main}/>
         <Route exact path={AppRoute.Offer} render={(props) => (<Offer offerId={props.match.params.id}/>)}/>
-        <PrivateRoute exact path={AppRoute.Favorites} component={() => <Favorites/>} redirectTo={AppRoute.Login}
-          renderAllowed={isAuthenticated}
-        />
-        <PrivateRoute exact path={AppRoute.Login} component={() => <Login/>} redirectTo={AppRoute.Root}
-          renderAllowed={!isAuthenticated}
-        />
+        <PrivateRoute exact path={AppRoute.Favorites} component={() => <Favorites/>} redirectTo={AppRoute.Login} renderAllowed={isAuthenticated}/>
+        <PrivateRoute exact path={AppRoute.Login} component={() => <Login/>} redirectTo={AppRoute.Root} renderAllowed={!isAuthenticated}/>
         <Route component={ErrorNotFound}/>
       </Switch>
     </Router>
   );
 }
 
-export {App};
-export default connector(App);
+export default App;

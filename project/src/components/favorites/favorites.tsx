@@ -1,35 +1,31 @@
 import {Link} from 'react-router-dom';
 import Header from '../header/header';
-import {connect, ConnectedProps} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
-import {ThunkAppDispatch} from '../../types/action';
 import {getRating} from '../../utils';
 import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import React, {useEffect, useState} from 'react';
 import {AppRoute} from '../../consts';
 import {getFavorites} from '../../store/selectors/selectors';
-import {State} from '../../types/state';
 
-const mapStateToProps = (state: State) => ({
-  favorites: getFavorites(state),
-});
+function Favorites(): JSX.Element {
+  const favorites = useSelector(getFavorites);
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSetFavorite: (id: number, status: boolean) => {
-    dispatch(fetchSetFavoriteAction(id, status)).then(() => dispatch(fetchFavoritesAction()));
-  },
-  onLoad: () => dispatch(fetchFavoritesAction()),
-});
+  const dispatch = useDispatch();
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+  const onSetFavorite = (id: number, status: boolean) => {
+    new Promise((resolve) => resolve(dispatch(fetchSetFavoriteAction(id, status))))
+      .then(() => dispatch(fetchFavoritesAction()));
+  };
 
-function Favorites({favorites, onSetFavorite, onLoad}: ConnectedProps<typeof connector>): JSX.Element {
+  const onLoad = () => new Promise((resolve) => resolve(dispatch(fetchFavoritesAction())));
+
   const [isDataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     onLoad().then(() => setDataLoaded(true));
-  }, [onLoad]);
+  }, []);
 
   if (!isDataLoaded) {
     return <Loader/>;
@@ -112,5 +108,4 @@ function Favorites({favorites, onSetFavorite, onLoad}: ConnectedProps<typeof con
   );
 }
 
-export {Favorites};
-export default connector(Favorites);
+export default Favorites;

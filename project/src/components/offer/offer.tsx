@@ -4,48 +4,38 @@ import CardList from '../card-list/card-list';
 import React, {useEffect, useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import Map from '../map/map';
-import {connect, ConnectedProps} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getRating} from '../../utils';
-import {ThunkAppDispatch} from '../../types/action';
 import Loader from '../loader/loader';
 import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
-import {getAuthorizationStatus, getNearOffers, getOffer, getReviews} from '../../store/selectors/selectors';
-import {State} from '../../types/state';
+import {getNearOffers, getOffer} from '../../store/selectors/selectors';
 
 type OfferProps = {
   offerId: string
 }
 
-const mapStateToProps = (state: State) => ({
-  offer: getOffer(state),
-  reviews: getReviews(state),
-  nearOffers: getNearOffers(state),
-  authorizationStatus: getAuthorizationStatus(state),
-});
+function Offer({offerId}: OfferProps): JSX.Element {
+  const offer = useSelector(getOffer);
+  const nearOffers = useSelector(getNearOffers);
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSetFavorite: (id: number, status: boolean) => {
+  const dispatch = useDispatch();
+
+  const onSetFavorite = (id: number, status: boolean) => {
     dispatch(fetchSetFavoriteAction(id, status));
-  },
-  onLoad: (id: string) => Promise.all([
+  };
+
+  const onLoad = (id: string) => Promise.all([
     dispatch(fetchOfferByIdAction(id)),
     dispatch(fetchCommentsAction(id)),
     dispatch(fetchNearOffersAction(id)),
-  ]),
-});
+  ]);
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & OfferProps;
-
-function Offer({offer, nearOffers, offerId, onSetFavorite, onLoad}: ConnectedComponentProps): JSX.Element {
   const [isDataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     onLoad(offerId).then(() => setDataLoaded(true));
-  }, [offerId, onLoad]);
+  }, []);
 
   if (!isDataLoaded) {
     return <Loader/>;
@@ -168,5 +158,4 @@ function Offer({offer, nearOffers, offerId, onSetFavorite, onLoad}: ConnectedCom
   );
 }
 
-export {Offer};
-export default connector(Offer);
+export default Offer;

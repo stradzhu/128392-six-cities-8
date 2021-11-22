@@ -1,7 +1,6 @@
 import {Link} from 'react-router-dom';
-import {connect, ConnectedProps} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {OfferType} from '../../types/offer-info';
-import {ThunkAppDispatch} from '../../types/action';
 import {getRating} from '../../utils';
 import {fetchSetFavoriteAction} from '../../store/actions/api-actions';
 
@@ -13,19 +12,14 @@ type CardProps = {
   onMouseLeave?: () => void,
 }
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSetFavorite: (id: number, status: boolean) => {
-    dispatch(fetchSetFavoriteAction(id, status));
-  },
-});
-
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & CardProps;
-
 /* эх, "удобная" разметка http://joxi.ru/gmvKkjKhewq832 поэтому я передаю 2 дополнительных css класса */
-function Card({offer, blockClass, elementClass, onMouseEnter, onMouseLeave, onSetFavorite}: ConnectedComponentProps): JSX.Element {
+function Card({offer, blockClass, elementClass, onMouseEnter, onMouseLeave}: CardProps): JSX.Element {
+  const dispatch = useDispatch();
+
+  const onSetFavorite = (id: number, status: boolean) => {
+    dispatch(fetchSetFavoriteAction(id, status));
+  };
+
   return (
     <article className={`${blockClass} place-card`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
 
@@ -69,5 +63,4 @@ function Card({offer, blockClass, elementClass, onMouseEnter, onMouseLeave, onSe
   );
 }
 
-export {Card};
-export default connector(Card);
+export default Card;
