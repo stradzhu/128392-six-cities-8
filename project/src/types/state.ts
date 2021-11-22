@@ -1,4 +1,4 @@
-import {OffersType} from './offer-info';
+import {OffersType, OfferType} from './offer-info';
 import {Reviews} from './reviews';
 import {AuthorizationStatus, SortTypes} from '../consts';
 import {UserInfo} from './user-info';
@@ -8,7 +8,9 @@ export type State = {
   authorizationStatus: AuthorizationStatus
   currentSortType: SortTypes,
   offers: OffersType,
+  favorites: OffersType,
+  offer: OfferType | null,
+  nearOffers: OffersType,
   reviews: Reviews,
-  isDataLoaded: boolean,
   userInfo: UserInfo | null
 }

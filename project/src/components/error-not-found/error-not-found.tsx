@@ -4,7 +4,7 @@ import Header from '../header/header';
 function ErrorNotFound(): JSX.Element {
   return (
     <div className="page page--gray page--main">
-      <Header />
+      <Header/>
       <main className="page__main page__main--index page__main--index-empty">
         <div className="cities">
           <div className="cities__places-container cities__places-container--empty container">
@@ -14,7 +14,7 @@ function ErrorNotFound(): JSX.Element {
                 Возможно она была, но исчезла из-за катастрофически быстрого сжатия под воздействием гравитационных сил.
                 Но это не точно ;) <Link to='/' style={{textDecoration: 'underline'}}>Вернуться на главную страницу</Link>
               </p>
-              <hr />
+              <hr/>
               <p className="cities__status-description">
                 &copy; <a href="https://htmlacademy.ru/404" target="_blank" rel="noreferrer">HTML Academy</a>
               </p>

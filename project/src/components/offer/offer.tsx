@@ -1,32 +1,42 @@
-import {AuthorizationStatus, RatingStar} from '../../consts';
 import Header from '../header/header';
 import {PointsType} from '../../types/offer-info';
 import CardList from '../card-list/card-list';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
-import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
-import {getActualReviews, getRating} from '../../utils';
-import {Dispatch} from 'redux';
-import {Actions} from '../../types/action';
-import {toggleFavorites} from '../../store/action';
+import {getRating} from '../../utils';
+import {ThunkAppDispatch} from '../../types/action';
+import Loader from '../loader/loader';
+import {
+  fetchCommentsAction,
+  fetchNearOffersAction,
+  fetchOfferByIdAction,
+  fetchSetFavoriteAction
+} from '../../store/api-actions';
+import Reviews from '../reviews/reviews';
 
 type OfferProps = {
   offerId: string
 }
 
-const mapStateToProps = ({offers, reviews, authorizationStatus}: State) => ({
-  offers,
+const mapStateToProps = ({offer, reviews, nearOffers, authorizationStatus}: State) => ({
+  offer,
   reviews,
+  nearOffers,
   authorizationStatus,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onClickToggleFavorites: (id: number) => {
-    dispatch(toggleFavorites(id));
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onSetFavorite: (id: number, status: boolean) => {
+    dispatch(fetchSetFavoriteAction(id, status));
   },
+  onLoad: (id: string) => Promise.all([
+    dispatch(fetchOfferByIdAction(id)),
+    dispatch(fetchCommentsAction(id)),
+    dispatch(fetchNearOffersAction(id)),
+  ]),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -34,70 +44,27 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & OfferProps;
 
-function ReviewsForm(): JSX.Element {
-  const [, setReview] = useState('');
-  const [, setRating] = useState(0);
+function Offer({offer, nearOffers, offerId, onSetFavorite, onLoad}: ConnectedComponentProps): JSX.Element {
+  const [isDataLoaded, setDataLoaded] = useState(false);
 
-  return (
-    <form className="reviews__form form" action="#" method="post">
-      <label className="reviews__label form__label" htmlFor="review">Your review</label>
-      <div className="reviews__rating-form form__rating">
-        {RatingStar.map(({mark, title})=>(
-          <React.Fragment key={mark}>
-            <input className="form__rating-input visually-hidden"
-              name="rating"
-              value={mark}
-              id={`${mark}-stars`}
-              type="radio"
-              data-rating={mark}
-              onClick={(event)=>{
-                const input = event.target as HTMLInputElement;
-                setRating(Number(input.value));
-              }}
-            />
-            <label htmlFor={`${mark}-stars`} className="reviews__rating-label form__rating-label" title={title}>
-              <svg className="form__star-image" width="37" height="33">
-                <use xlinkHref="#icon-star" />
-              </svg>
-            </label>
-          </React.Fragment>
-        ))}
-      </div>
-      <textarea
-        className="reviews__textarea form__textarea"
-        id="review" name="review"
-        placeholder="Tell how was your stay, what you like and what can be improved"
-        onChange = {
-          (event) => {
-            setReview(event.target.value);
-          }
-        }
-      />
-      <div className="reviews__button-wrapper">
-        <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
-        </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>
-      </div>
-    </form>
-  );
-}
+  useEffect(() => {
+    onLoad(offerId).then(() => setDataLoaded(true));
+  }, [offerId, onLoad]);
 
-function Offer({authorizationStatus, offers, reviews, offerId, onClickToggleFavorites}: ConnectedComponentProps): JSX.Element {
-  const offer = offers.find((item) => String(item.id) === offerId);
-
-  if (!offer) {
-    return <ErrorNotFound />;
+  if (!isDataLoaded) {
+    return <Loader/>;
   }
 
-  const mapPoints: PointsType = offers.slice(0, 3);
-  mapPoints.push({location: offer.location, id: offer.id});
+  if (!offer) {
+    return <ErrorNotFound/>;
+  }
 
-  const actualReviews = getActualReviews(reviews);
+  const mapPoints = nearOffers.map(({location, id}) => ({location, id})) as PointsType;
+  mapPoints.push({location: offer.location, id: offer.id});
 
   return (
     <div className="page">
-      <Header />
+      <Header/>
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
@@ -112,25 +79,26 @@ function Offer({authorizationStatus, offers, reviews, offerId, onClickToggleFavo
           <div className="property__container container">
             <div className="property__wrapper">
               {offer.isPremium &&
-                <div className="property__mark">
-                  <span>Premium</span>
-                </div>}
+              <div className="property__mark">
+                <span>Premium</span>
+              </div>}
               <div className="property__name-wrapper">
                 <h1 className="property__name">
                   {offer.title}
                 </h1>
-                <button className={`property__bookmark-button ${offer.isFavorite && 'property__bookmark-button--active'} button`}
-                  type="button" onClick={() => onClickToggleFavorites(offer.id)}
+                <button
+                  className={`property__bookmark-button ${offer.isFavorite && 'property__bookmark-button--active'} button`}
+                  type="button" onClick={() => onSetFavorite(offer.id, !offer.isFavorite)}
                 >
                   <svg className="property__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark" />
+                    <use xlinkHref="#icon-bookmark"/>
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">{offer.isFavorite ? 'In' : 'To'} bookmarks</span>
                 </button>
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: getRating(offer.rating)}} />
+                  <span style={{width: getRating(offer.rating)}}/>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
@@ -155,7 +123,7 @@ function Offer({authorizationStatus, offers, reviews, offerId, onClickToggleFavo
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                  {offer.goods.map((good)=>(
+                  {offer.goods.map((good) => (
                     <li className="property__inside-item" key={good}>
                       {good}
                     </li>
@@ -166,35 +134,36 @@ function Offer({authorizationStatus, offers, reviews, offerId, onClickToggleFavo
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74"
+                      alt="Host avatar"
+                    />
                   </div>
                   <span className="property__user-name">
                     {offer.host.name}
                   </span>
                   {offer.host.isPro &&
-                    <span className="property__user-status">
+                  <span className="property__user-status">
                       Pro
-                    </span>}
+                  </span>}
                 </div>
                 <div className="property__description">
                   <p className="property__text">{offer.description}</p>
                 </div>
               </div>
-              <section className="property__reviews reviews">
-                {reviews.length > 0 && <ReviewsList reviews={actualReviews} />}
-                {authorizationStatus === AuthorizationStatus.Auth && ReviewsForm()}
-              </section>
+
+              <Reviews/>
+
             </div>
           </div>
           <section className="property__map map">
-            <Map points={mapPoints} hoveredOfferId={offer.id} />
+            <Map points={mapPoints} hoveredOfferId={offer.id}/>
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <CardList offers={offers.slice(0, 3)} blockClass="near-places__card" elementClass="near-places__image-wrapper" />
+              <CardList offers={nearOffers} blockClass="near-places__card" elementClass="near-places__image-wrapper"/>
             </div>
           </section>
         </div>

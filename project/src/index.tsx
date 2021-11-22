@@ -8,12 +8,14 @@ import {Provider} from 'react-redux';
 import App from './components/app/app';
 import {reducer} from './store/reducer';
 import {setAuthorization} from './store/action';
-import {fetchOffersAction, checkAuthAction} from './store/api-actions';
+import {checkAuthAction} from './store/api-actions';
 import {ThunkAppDispatch} from './types/action';
 import {AuthorizationStatus} from './consts';
 import {redirect} from './store/middlewares/redirect';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const api = createAPI(  () => store.dispatch(setAuthorization(AuthorizationStatus.NoAuth)));
+const api = createAPI(() => store.dispatch(setAuthorization(AuthorizationStatus.NoAuth)));
 
 const composeEnhancers = composeWithDevTools({
   trace: true,
@@ -26,11 +28,11 @@ const store = createStore(reducer, composeEnhancers(
 ));
 
 (store.dispatch as ThunkAppDispatch)(checkAuthAction());
-(store.dispatch as ThunkAppDispatch)(fetchOffersAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer />
       <App/>
     </Provider>
   </React.StrictMode>,
