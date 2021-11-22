@@ -8,7 +8,6 @@ import Loader from '../loader/loader';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import PrivateRoute from '../private-route/private-route';
 import {useSelector} from 'react-redux';
-import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
 import {getAuthorizationStatus} from '../../store/selectors/selectors';
 
@@ -16,7 +15,7 @@ function App(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
 
-  if (!isCheckedAuth) {
+  if (authorizationStatus === AuthorizationStatus.Unknown) {
     return <Loader/>;
   }
 

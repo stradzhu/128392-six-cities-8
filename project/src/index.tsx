@@ -24,16 +24,13 @@ const store = configureStore({
     }).concat(redirect),
 });
 
-new Promise((resolve) => {
-  resolve(store.dispatch(checkAuthAction()));
-})
-  .finally(() => {
-    ReactDOM.render(
-      <React.StrictMode>
-        <Provider store={store}>
-          <ToastContainer />
-          <App/>
-        </Provider>
-      </React.StrictMode>,
-      document.getElementById('root'));
-  });
+store.dispatch(checkAuthAction());
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <ToastContainer />
+      <App/>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root'));
