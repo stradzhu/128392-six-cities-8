@@ -3,68 +3,79 @@ import {AppRoute, AuthorizationStatus, SortTypes} from '../../consts';
 import {OffersType, OfferType} from '../../types/offer-info';
 import {UserInfo} from '../../types/user-info';
 import {Reviews} from '../../types/reviews';
+import {createAction} from '@reduxjs/toolkit';
 
-export const changeCity = (city: string) => ({
-  type: ActionType.ChangeCity,
-  payload: city,
-} as const);
+export const changeCity = createAction(
+  ActionType.ChangeCity, (city: string) => ({
+    payload: city,
+  }),
+);
 
-export const changeSortType = (type: SortTypes) => ({
-  type: ActionType.ChangeSortType,
-  payload: type,
-} as const);
+export const changeSortType = createAction(
+  ActionType.ChangeSortType, (type: SortTypes) => ({
+    payload: type,
+  }),
+);
 
-export const setFavorite = (id: number, status: boolean) => ({
-  type: ActionType.SetFavorite,
-  payload: {id, status},
-} as const);
+export const setFavorite = createAction(
+  ActionType.SetFavorite, (id: number, status: boolean) => ({
+    payload: {id, status},
+  }),
+);
 
-export const setFavoriteInOffer = (id: number, status: boolean) => ({
-  type: ActionType.SetFavoriteInOffer,
-  payload: {id, status},
-} as const);
+export const setFavoriteInOffer = createAction(
+  ActionType.SetFavoriteInOffer, (id: number, status: boolean) => ({
+    payload: {id, status},
+  }),
+);
 
-export const loadOffers = (offers: OffersType) => ({
-  type: ActionType.LoadOffers,
-  payload: offers,
-} as const);
+export const loadOffers = createAction(
+  ActionType.LoadOffers, (offers: OffersType) => ({
+    payload: offers,
+  }),
+);
 
-export const setAuthorization = (authStatus: AuthorizationStatus) => ({
-  type: ActionType.SetAuthorization,
-  payload: authStatus,
-} as const);
+export const setAuthorization = createAction(
+  ActionType.SetAuthorization, (authStatus: AuthorizationStatus) => ({
+    payload: authStatus,
+  }),
+);
 
-export const requireLogout = () => ({
-  type: ActionType.RequireLogout,
-} as const);
+export const requireLogout = createAction(ActionType.RequireLogout);
 
-export const redirectToRoute = (url: AppRoute) => ({
-  type: ActionType.RedirectToRoute,
-  payload: url,
-} as const);
+export const redirectToRoute = createAction(
+  ActionType.RedirectToRoute, (url: AppRoute) => ({
+    payload: url,
+  }),
+);
 
-export const setUserInfo = (user: UserInfo) => ({
-  type: ActionType.SetUserInfo,
-  payload: user,
-} as const);
+export const setUserInfo = createAction(
+  ActionType.SetUserInfo, (user: UserInfo) => ({
+    payload: user,
+  }),
+);
 
-export const loadOfferById = (offer: OfferType | null) => ({
-  type: ActionType.LoadOfferById,
-  payload: offer,
-} as const);
+export const loadOfferById = createAction(
+  ActionType.LoadOfferById, (offer: OfferType | null) => ({
+    payload: offer,
+  }),
+);
 
-export const loadOfferComments = (reviews: Reviews) => ({
-  type: ActionType.LoadOfferComments,
-  payload: reviews,
-} as const);
+export const loadOfferComments = createAction(
+  ActionType.LoadOfferComments, (reviews: Reviews) => ({
+    payload: reviews,
+  }),
+);
 
-export const loadNearOffers = (offers: OffersType) => ({
-  type: ActionType.LoadNearOffers,
-  payload: offers,
-} as const);
+export const loadNearOffers = createAction(
+  ActionType.LoadNearOffers, (offers: OffersType) => ({
+    payload: offers,
+  }),
+);
 
-export const loadFavorites = (favorites: OffersType) => ({
-  type: ActionType.LoadFavorites,
-  payload: favorites,
-} as const);
+export const loadFavorites = createAction(
+  ActionType.LoadFavorites, (favorites: OffersType) => ({
+    payload: favorites,
+  }),
+);
 

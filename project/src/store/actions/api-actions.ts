@@ -1,7 +1,9 @@
 import {toast} from 'react-toastify';
 import {ThunkActionResult} from '../../types/action';
-import {loadFavorites, loadNearOffers, loadOfferById, loadOfferComments, loadOffers, redirectToRoute,
-  requireLogout, setAuthorization, setFavorite, setFavoriteInOffer, setUserInfo} from './action';
+import {
+  loadFavorites, loadNearOffers, loadOfferById, loadOfferComments, loadOffers, redirectToRoute,
+  requireLogout, setAuthorization, setFavorite, setFavoriteInOffer, setUserInfo
+} from './action';
 import {dropToken, saveToken} from '../../services/token';
 import {APIRoute, AppRoute, AuthorizationStatus, InformationMessages} from '../../consts';
 import {AuthData} from '../../types/auth-data';

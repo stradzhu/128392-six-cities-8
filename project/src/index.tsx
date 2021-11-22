@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import {createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
+import {configureStore} from '@reduxjs/toolkit';
 import {createAPI} from './services/api';
 import {Provider} from 'react-redux';
 import App from './components/app/app';
@@ -17,15 +15,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const api = createAPI(() => store.dispatch(setAuthorization(AuthorizationStatus.NoAuth)));
 
-const composeEnhancers = composeWithDevTools({
-  trace: true,
-  traceLimit: 25,
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }).concat(redirect),
 });
-
-const store = createStore(rootReducer, composeEnhancers(
-  applyMiddleware(thunk.withExtraArgument(api)),
-  applyMiddleware(redirect),
-));
 
 (store.dispatch as ThunkAppDispatch)(checkAuthAction());
 

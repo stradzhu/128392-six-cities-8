@@ -1,5 +1,6 @@
 import {DataState} from '../../types/state';
-import {Actions, ActionType} from '../../types/action';
+import {createReducer} from '@reduxjs/toolkit';
+import {setFavorite, setFavoriteInOffer, loadOffers, loadFavorites, loadOfferComments, loadOfferById, loadNearOffers} from '../actions/action';
 
 const initialState: DataState = {
   offers: [],
@@ -9,34 +10,35 @@ const initialState: DataState = {
   reviews: [],
 };
 
-export const dataReducer = (state: DataState = initialState, action: Actions): DataState => {
-  switch (action.type) {
-    case ActionType.SetFavorite:
-      return {
-        ...state, offers: state.offers.map((offer) => {
-          if (offer.id === action.payload.id) {
-            offer.isFavorite = action.payload.status;
-            return offer;
-          }
+export const dataReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(setFavorite, (state: DataState, action) => {
+      state.offers = state.offers.map((offer) => {
+        if (offer.id === action.payload.id) {
+          offer.isFavorite = action.payload.status;
           return offer;
-        }),
-      };
-    case ActionType.SetFavoriteInOffer:
+        }
+        return offer;
+      });
+    })
+    .addCase(setFavoriteInOffer, (state: DataState, action) => {
       if (state.offer && state.offer.id === action.payload.id) {
-        return {...state, offer: Object.assign({}, state.offer, {isFavorite: action.payload.status})};
+        state.offer.isFavorite = action.payload.status;
       }
-      return state;
-    case ActionType.LoadOffers:
-      return {...state, offers: action.payload};
-    case ActionType.LoadFavorites:
-      return {...state, favorites: action.payload};
-    case ActionType.LoadOfferComments:
-      return {...state, reviews: action.payload};
-    case ActionType.LoadOfferById:
-      return {...state, offer: action.payload};
-    case ActionType.LoadNearOffers:
-      return {...state, nearOffers: action.payload};
-    default:
-      return state;
-  }
-};
+    })
+    .addCase(loadOffers, (state: DataState, action) => {
+      state.offers = action.payload;
+    })
+    .addCase(loadFavorites, (state: DataState, action) => {
+      state.favorites = action.payload;
+    })
+    .addCase(loadOfferComments, (state: DataState, action) => {
+      state.reviews = action.payload;
+    })
+    .addCase(loadOfferById, (state: DataState, action) => {
+      state.offer = action.payload;
+    })
+    .addCase(loadNearOffers, (state: DataState, action) => {
+      state.nearOffers = action.payload;
+    });
+});
