@@ -1,16 +1,18 @@
 import {Reviews} from '../../types/reviews';
-import {getRating} from '../../utils';
+import {getActualReviews, getRating} from '../../utils';
 
 type ReviewsListProp = {
   reviews: Reviews
 }
 
 function ReviewsList({reviews}: ReviewsListProp): JSX.Element {
+  const actualReviews = getActualReviews(reviews);
+
   return (
     <>
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
       <ul className="reviews__list">
-        {reviews.map((review) => (
+        {actualReviews.map((review) => (
           <li key={review.id} className="reviews__item">
             <div className="reviews__user user">
               <div className="reviews__avatar-wrapper user__avatar-wrapper">

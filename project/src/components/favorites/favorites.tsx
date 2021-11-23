@@ -5,7 +5,7 @@ import FavoritesEmpty from '../favorites-empty/favorites-empty';
 import {getRating} from '../../utils';
 import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {AppRoute} from '../../consts';
 import {getFavorites} from '../../store/selectors/selectors';
 
@@ -19,13 +19,13 @@ function Favorites(): JSX.Element {
       .then(() => dispatch(fetchFavoritesAction()));
   };
 
-  const onLoad = () => new Promise((resolve) => resolve(dispatch(fetchFavoritesAction())));
+  const onLoad = useCallback(() => new Promise((resolve) => resolve(dispatch(fetchFavoritesAction()))), [dispatch]);
 
   const [isDataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     onLoad().then(() => setDataLoaded(true));
-  }, []);
+  }, [onLoad]);
 
   if (!isDataLoaded) {
     return <Loader/>;

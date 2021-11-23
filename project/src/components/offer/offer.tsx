@@ -1,7 +1,7 @@
 import Header from '../header/header';
 import {PointsType} from '../../types/offer-info';
 import CardList from '../card-list/card-list';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import Map from '../map/map';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,12 +10,9 @@ import Loader from '../loader/loader';
 import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
 import {getNearOffers, getOffer} from '../../store/selectors/selectors';
+import {RouteComponentProps} from 'react-router-dom';
 
-type OfferProps = {
-  offerId: string
-}
-
-function Offer({offerId}: OfferProps): JSX.Element {
+function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string}>): JSX.Element {
   const offer = useSelector(getOffer);
   const nearOffers = useSelector(getNearOffers);
 
@@ -25,17 +22,17 @@ function Offer({offerId}: OfferProps): JSX.Element {
     dispatch(fetchSetFavoriteAction(id, status));
   };
 
-  const onLoad = (id: string) => Promise.all([
+  const onLoad = useCallback((id: string) => Promise.all([
     dispatch(fetchOfferByIdAction(id)),
     dispatch(fetchCommentsAction(id)),
     dispatch(fetchNearOffersAction(id)),
-  ]);
+  ]), [dispatch]);
 
   const [isDataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     onLoad(offerId).then(() => setDataLoaded(true));
-  }, []);
+  }, [offerId, onLoad]);
 
   if (!isDataLoaded) {
     return <Loader/>;

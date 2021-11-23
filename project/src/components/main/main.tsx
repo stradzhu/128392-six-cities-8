@@ -3,7 +3,7 @@ import CityList from '../city-list/city-list';
 import CardList from '../card-list/card-list';
 import Map from '../map/map';
 import {PointsType} from '../../types/offer-info';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeCity} from '../../store/actions/action';
 import PlaceSorting from '../places-sorting/place-sorting';
@@ -24,14 +24,14 @@ function Main(): JSX.Element {
     dispatch(changeCity(city));
   };
 
-  const onLoad = () => new Promise((resolve) => resolve(dispatch(fetchOffersAction())));
+  const onLoad = useCallback(() => new Promise((resolve) => resolve(dispatch(fetchOffersAction()))), [dispatch]);
 
   const [isDataLoaded, setDataLoaded] = useState(false);
   const [hoveredOfferId, setHoveredOfferId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     onLoad().then(() => setDataLoaded(true));
-  }, []);
+  }, [onLoad]);
 
   if (!isDataLoaded) {
     return <Loader/>;
