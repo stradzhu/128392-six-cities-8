@@ -69,7 +69,6 @@ export const fetchCommentsAction = (id: string): ThunkActionResult =>
       dispatch(loadOfferComments(adaptCommentsToClient(data)));
     } catch {
       dispatch(loadOfferComments([]));
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
     }
   };
 
@@ -80,7 +79,6 @@ export const fetchNearOffersAction = (id: string): ThunkActionResult =>
       dispatch(loadNearOffers(adaptOffersToClient(data)));
     } catch {
       dispatch(loadNearOffers([]));
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
     }
   };
 

@@ -23,7 +23,7 @@ function App(): JSX.Element {
     <Router history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Root} component={Main}/>
-        <Route exact path={AppRoute.Offer} render={(props) => (<Offer offerId={props.match.params.id}/>)}/>
+        <Route exact path={AppRoute.Offer} render={(props) => (<Offer {...props}/>)}/>
         <PrivateRoute exact path={AppRoute.Favorites} component={() => <Favorites/>} redirectTo={AppRoute.Login} renderAllowed={isAuthenticated}/>
         <PrivateRoute exact path={AppRoute.Login} component={() => <Login/>} redirectTo={AppRoute.Root} renderAllowed={!isAuthenticated}/>
         <Route component={ErrorNotFound}/>
