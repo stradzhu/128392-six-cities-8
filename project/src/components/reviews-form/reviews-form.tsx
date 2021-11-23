@@ -1,24 +1,17 @@
 import {toast} from 'react-toastify';
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {RatingStar, ReviewSetting} from '../../consts';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../types/action';
-import {connect, ConnectedProps} from 'react-redux';
-import {postCommentsAction} from '../../store/api-actions';
+import { useDispatch, useSelector} from 'react-redux';
+import {postCommentsAction} from '../../store/actions/api-actions';
+import {getOffer} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({offer}: State) => ({
-  offer,
-});
+function ReviewsForm(): JSX.Element {
+  const offer = useSelector(getOffer);
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(commentPost: { id: string, rating: number, comment: string }) {
-    return dispatch(postCommentsAction(commentPost));
-  },
-});
+  const dispatch = useDispatch();
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+  const onSubmit = (commentPost: { id: string, rating: number, comment: string }) => dispatch(postCommentsAction(commentPost));
 
-function ReviewsForm({offer, onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
   const [isSendingRequest, setSendingRequest] = useState(false);
 
   const [formState, setFormState] = useState({
@@ -122,5 +115,4 @@ function ReviewsForm({offer, onSubmit}: ConnectedProps<typeof connector>): JSX.E
   );
 }
 
-export {ReviewsForm};
-export default connector(ReviewsForm);
+export default ReviewsForm;

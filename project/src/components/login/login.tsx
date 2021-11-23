@@ -1,8 +1,7 @@
 import {Link} from 'react-router-dom';
 import {FormEvent, useState, ChangeEvent} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
-import {loginAction} from '../../store/api-actions';
-import {ThunkAppDispatch} from '../../types/action';
+import {useDispatch} from 'react-redux';
+import {loginAction} from '../../store/actions/api-actions';
 import {AuthData} from '../../types/auth-data';
 import Header from '../header/header';
 import {AppRoute} from '../../consts';
@@ -15,15 +14,13 @@ type InputLoginForm = {
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(authData: AuthData) {
+function Login(): JSX.Element {
+  const dispatch = useDispatch();
+
+  const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
-  },
-});
+  };
 
-const connector = connect(null, mapDispatchToProps);
-
-function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
   const [formState, setFormState] = useState<InputLoginForm>({
     email: {
       value: '',
@@ -33,7 +30,7 @@ function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
     password: {
       value: '',
       isValid: false,
-      regex: '^(?=.*[0-9])(?=.*[a-zA-Zа-яА-Я~!@#$%^&*()Ё"№;%:?*_+-=])([a-zA-Zа-яА-Я0-9~!@#$%^&*()Ё"№;%:?*_+-=]+)$',
+      regex: '(?=.*[A-Za-zа-яА-Я])(?=.*[0-9])[A-Za-zа-яА-Я0-9]+',
     },
   });
 
@@ -102,5 +99,4 @@ function Login({onSubmit}: ConnectedProps<typeof connector>): JSX.Element {
   );
 }
 
-export {Login};
-export default connector(Login);
+export default Login;

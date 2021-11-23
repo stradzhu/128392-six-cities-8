@@ -4,44 +4,34 @@ import CardList from '../card-list/card-list';
 import Map from '../map/map';
 import {PointsType} from '../../types/offer-info';
 import React, {useEffect, useState} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../types/action';
-import {changeCity} from '../../store/action';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeCity} from '../../store/actions/action';
 import PlaceSorting from '../places-sorting/place-sorting';
 import {getSortedOffers} from '../../utils';
-import {fetchOffersAction} from '../../store/api-actions';
+import {fetchOffersAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import MainEmpty from '../main-empty/main-empty';
+import {getActiveCity, getCurrentSortType, getOffers} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({activeCity, offers, currentSortType}: State) => ({
-  activeCity,
-  offers,
-  currentSortType,
-});
+function Main(): JSX.Element {
+  const activeCity = useSelector(getActiveCity);
+  const offers = useSelector(getOffers);
+  const currentSortType = useSelector(getCurrentSortType);
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onClickCity: (activeCity: string) => {
-    dispatch(changeCity(activeCity));
-  },
-  onLoad: () => dispatch(fetchOffersAction()),
-});
+  const dispatch = useDispatch();
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+  const onClickCity = (city: string) => {
+    dispatch(changeCity(city));
+  };
 
-function Main({
-  activeCity,
-  offers,
-  currentSortType,
-  onClickCity,
-  onLoad,
-}: ConnectedProps<typeof connector>): JSX.Element {
+  const onLoad = () => new Promise((resolve) => resolve(dispatch(fetchOffersAction())));
+
   const [isDataLoaded, setDataLoaded] = useState(false);
   const [hoveredOfferId, setHoveredOfferId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     onLoad().then(() => setDataLoaded(true));
-  }, [onLoad]);
+  }, []);
 
   if (!isDataLoaded) {
     return <Loader/>;
@@ -92,5 +82,4 @@ function Main({
   );
 }
 
-export {Main};
-export default connector(Main);
+export default Main;

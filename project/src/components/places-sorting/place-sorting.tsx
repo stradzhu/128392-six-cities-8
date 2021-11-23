@@ -1,25 +1,18 @@
 import {useState} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {SortTypes} from '../../consts';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../types/action';
-import {changeSortType} from '../../store/action';
+import {changeSortType} from '../../store/actions/action';
+import {getCurrentSortType} from '../../store/selectors/selectors';
 
-const mapStateToProps = ({currentSortType}: State) => ({
-  currentSortType,
-});
+function PlaceSorting(): JSX.Element {
+  const currentSortType = useSelector(getCurrentSortType);
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onChangeSortType: (type: SortTypes) => {
+  const dispatch = useDispatch();
+
+  const onChangeSortType = (type: SortTypes) => {
     dispatch(changeSortType(type));
-  },
-});
+  };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function PlaceSorting({currentSortType, onChangeSortType}: PropsFromRedux): JSX.Element {
   const [isOpenSort, setOpenSort] = useState(false);
 
   const handleToggleSort = () => {
@@ -53,5 +46,4 @@ function PlaceSorting({currentSortType, onChangeSortType}: PropsFromRedux): JSX.
   );
 }
 
-export {PlaceSorting};
-export default connector(PlaceSorting);
+export default PlaceSorting;

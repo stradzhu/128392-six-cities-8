@@ -1,5 +1,5 @@
 import {OffersType, OfferType} from './types/offer-info';
-import {AuthorizationStatus, ReviewSetting, SortTypes} from './consts';
+import {ReviewSetting, SortTypes} from './consts';
 import {Review, Reviews} from './types/reviews';
 import {UserInfo} from './types/user-info';
 
@@ -23,10 +23,8 @@ export const getSortedOffers = (offers: OffersType, SortType: SortTypes): Offers
 export const getRating = (rating: number): string => `${Math.round(rating) * 100 / 5}%`;
 
 export const getActualReviews = (reviews: Reviews): Reviews => (
-  reviews.sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date))
+  reviews.slice().sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date))
     .slice(0, ReviewSetting.MAX_COUNT_PER_PAGE));
-
-export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus !== AuthorizationStatus.Unknown;
 
 export const adaptOfferToClient = (offerFromBackend: OfferType): OfferType => {
   const adaptedOffer = Object.assign(
