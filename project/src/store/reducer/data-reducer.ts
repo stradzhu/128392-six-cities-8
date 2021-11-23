@@ -1,6 +1,6 @@
 import {DataState} from '../../types/state';
 import {createReducer} from '@reduxjs/toolkit';
-import {setFavorite, setFavoriteInOffer, loadOffers, loadFavorites, loadOfferComments, loadOfferById, loadNearOffers} from '../actions/action';
+import {setFavorite, setFavoriteNearOffers, setFavoriteInOffer, loadOffers, loadFavorites, loadOfferComments, loadOfferById, loadNearOffers} from '../actions/action';
 
 const initialState: DataState = {
   offers: [],
@@ -14,6 +14,15 @@ export const dataReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setFavorite, (state: DataState, action) => {
       state.offers = state.offers.map((offer) => {
+        if (offer.id === action.payload.id) {
+          offer.isFavorite = action.payload.status;
+          return offer;
+        }
+        return offer;
+      });
+    })
+    .addCase(setFavoriteNearOffers, (state: DataState, action) => {
+      state.nearOffers = state.nearOffers.map((offer) => {
         if (offer.id === action.payload.id) {
           offer.isFavorite = action.payload.status;
           return offer;

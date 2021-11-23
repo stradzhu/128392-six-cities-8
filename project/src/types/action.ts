@@ -7,6 +7,7 @@ export enum ActionType {
   ChangeCity = 'main/changeCity',
   ChangeSortType = 'main/changeSortType',
   SetFavorite = 'data/favorite',
+  SetFavoriteNearOffers = 'data/setFavoriteNearOffers',
   SetFavoriteInOffer = 'data/favoriteInOffer',
   LoadOffers = 'data/loadOffers',
   SetAuthorization = 'user/setAuthorization',

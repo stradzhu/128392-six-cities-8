@@ -23,6 +23,12 @@ export const setFavorite = createAction(
   }),
 );
 
+export const setFavoriteNearOffers = createAction(
+  ActionType.SetFavoriteNearOffers, (id: number, status: boolean) => ({
+    payload: {id, status},
+  }),
+);
+
 export const setFavoriteInOffer = createAction(
   ActionType.SetFavoriteInOffer, (id: number, status: boolean) => ({
     payload: {id, status},

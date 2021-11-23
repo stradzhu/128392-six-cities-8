@@ -2,7 +2,7 @@ import {toast} from 'react-toastify';
 import {ThunkActionResult} from '../../types/action';
 import {
   loadFavorites, loadNearOffers, loadOfferById, loadOfferComments, loadOffers, redirectToRoute,
-  requireLogout, setAuthorization, setFavorite, setFavoriteInOffer, setUserInfo
+  requireLogout, setAuthorization, setFavorite, setFavoriteInOffer, setFavoriteNearOffers, setUserInfo
 } from './action';
 import {dropToken, saveToken} from '../../services/token';
 import {APIRoute, AppRoute, AuthorizationStatus, InformationMessages} from '../../consts';
@@ -89,6 +89,7 @@ export const fetchSetFavoriteAction = (id: number, status: boolean): ThunkAction
         await api.post(`${APIRoute.Favorite}/${id}/${Number(status)}`);
         dispatch(setFavorite(id, status)); // обновит массив offers
         dispatch(setFavoriteInOffer(id, status));  // обновит один offer
+        dispatch(setFavoriteNearOffers(id, status));  // обновит nearOffers
       } catch {
         toast.error(InformationMessages.DATA_LOADING_ERROR);
       }
