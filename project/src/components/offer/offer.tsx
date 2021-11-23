@@ -9,13 +9,15 @@ import {getRating} from '../../utils';
 import Loader from '../loader/loader';
 import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';
-import {getNearOffers, getOffer} from '../../store/selectors/selectors';
+import {getAuthorizationStatus, getNearOffers, getOffer} from '../../store/selectors/selectors';
 import {RouteComponentProps} from 'react-router-dom';
-import {MAX_OFFER_PHOTO} from '../../consts';
+import {AuthorizationStatus, MAX_OFFER_PHOTO} from '../../consts';
 
 function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string}>): JSX.Element {
   const offer = useSelector(getOffer);
   const nearOffers = useSelector(getNearOffers);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
 
   const dispatch = useDispatch();
 
@@ -46,6 +48,8 @@ function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string
   const mapPoints = nearOffers.map(({location, id}) => ({location, id})) as PointsType;
   mapPoints.push({location: offer.location, id: offer.id});
 
+  const isFavorite = isAuthenticated ? offer.isFavorite : false;
+
   return (
     <div className="page">
       <Header/>
@@ -71,13 +75,13 @@ function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string
                   {offer.title}
                 </h1>
                 <button
-                  className={`property__bookmark-button ${offer.isFavorite && 'property__bookmark-button--active'} button`}
-                  type="button" onClick={() => onSetFavorite(offer.id, !offer.isFavorite)}
+                  className={`property__bookmark-button ${isFavorite && 'property__bookmark-button--active'} button`}
+                  type="button" onClick={() => onSetFavorite(offer.id, !isFavorite)}
                 >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"/>
                   </svg>
-                  <span className="visually-hidden">{offer.isFavorite ? 'In' : 'To'} bookmarks</span>
+                  <span className="visually-hidden">{isFavorite ? 'In' : 'To'} bookmarks</span>
                 </button>
               </div>
               <div className="property__rating rating">
