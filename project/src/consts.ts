@@ -78,3 +78,5 @@ export const RatingStar = [
     title: 'terribly',
   },
 ];
+
+export const MAX_OFFER_PHOTO = 6;

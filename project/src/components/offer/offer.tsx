@@ -11,6 +11,7 @@ import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchS
 import Reviews from '../reviews/reviews';
 import {getNearOffers, getOffer} from '../../store/selectors/selectors';
 import {RouteComponentProps} from 'react-router-dom';
+import {MAX_OFFER_PHOTO} from '../../consts';
 
 function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string}>): JSX.Element {
   const offer = useSelector(getOffer);
@@ -52,7 +53,7 @@ function Offer({match: {params: {id: offerId}}}: RouteComponentProps<{id: string
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {offer.images.map((image) => (
+              {offer.images.slice(0, MAX_OFFER_PHOTO).map((image) => (
                 <div className="property__image-wrapper" key={image}>
                   <img className="property__image" src={image} alt=""/>
                 </div>
