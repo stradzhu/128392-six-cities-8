@@ -32,22 +32,20 @@ function Header({isPageLogin = false}: HeaderProps): JSX.Element {
           {!isPageLogin &&
           <nav className="header__nav">
             <ul className="header__nav-list">
-              {isAuthenticated &&
               <li className="header__nav-item user">
-                <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
+                <Link className="header__nav-link header__nav-link--profile" to={isAuthenticated ? AppRoute.Favorites : AppRoute.Login}>
                   <div className="header__avatar-wrapper user__avatar-wrapper"/>
-                  <span className="header__user-name user__name">{userInfo?.email}</span>
+                  {isAuthenticated ?
+                    <span className="header__user-name user__name">{isAuthenticated ? userInfo?.email : 'Sign in'}</span> :
+                    <span className="header__login">{isAuthenticated ? userInfo?.email : 'Sign in'}</span>}
+                </Link>
+              </li>
+              {isAuthenticated &&
+              <li className="header__nav-item">
+                <Link className="header__nav-link" to="#" onClick={onClickLogoutAction}>
+                  <span className="header__signout">Sign out</span>
                 </Link>
               </li>}
-              <li className="header__nav-item">
-                {isAuthenticated ?
-                  <Link className="header__nav-link" to="#" onClick={onClickLogoutAction}>
-                    <span className="header__signout">Sign out</span>
-                  </Link> :
-                  <Link className="header__nav-link" to={AppRoute.Login}>
-                    <span className="header__signout">Sign in</span>
-                  </Link>}
-              </li>
             </ul>
           </nav>}
         </div>
