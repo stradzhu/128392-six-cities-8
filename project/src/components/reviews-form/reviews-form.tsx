@@ -1,7 +1,7 @@
 import {toast} from 'react-toastify';
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {RatingStar, ReviewSetting} from '../../consts';
-import { useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {postCommentsAction} from '../../store/actions/api-actions';
 import {getOffer} from '../../store/selectors/selectors';
 
@@ -10,7 +10,11 @@ function ReviewsForm(): JSX.Element {
 
   const dispatch = useDispatch();
 
-  const onSubmit = (commentPost: { id: string, rating: number, comment: string }) => dispatch(postCommentsAction(commentPost));
+  const onSubmit = (commentPost: {id: string, rating: number, comment: string}) => {
+    return new Promise((resolve) => {
+      resolve(dispatch(postCommentsAction(commentPost)))
+    })
+  }
 
   const [isSendingRequest, setSendingRequest] = useState(false);
 
@@ -28,22 +32,22 @@ function ReviewsForm(): JSX.Element {
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    Promise.resolve(() => setSendingRequest(true))
+    new Promise((resolve) => resolve(setSendingRequest(true)))
       .then(() => onSubmit({
-        id: String(offer?.id),
-        rating: Number(formState.rating.value),
-        comment: formState.review.value,
-      }))
+          id: String(offer?.id),
+          rating: Number(formState.rating.value),
+          comment: formState.review.value,
+        }))
       .then(() => setFormState({
-        rating: {
-          value: '',
-          isValid: false,
-        },
-        review: {
-          value: '',
-          isValid: false,
-        },
-      }))
+          rating: {
+            value: '',
+            isValid: false,
+          },
+          review: {
+            value: '',
+            isValid: false,
+          },
+        }))
       .catch((error) => {
         toast.error(error);
       })
@@ -84,6 +88,7 @@ function ReviewsForm(): JSX.Element {
               type="radio"
               onChange={handleChange}
               checked={formState.rating.value === String(mark)}
+              disabled={isSendingRequest}
             />
             <label htmlFor={`${mark}-stars`} className="reviews__rating-label form__rating-label" title={title}>
               <svg className="form__star-image" width="37" height="33">
@@ -99,6 +104,7 @@ function ReviewsForm(): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={handleChange}
         value={formState.review.value}
+        disabled={isSendingRequest}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">

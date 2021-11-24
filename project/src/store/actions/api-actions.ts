@@ -98,15 +98,15 @@ export const fetchSetFavoriteAction = (id: number, status: boolean): ThunkAction
     }
   };
 
-export const postCommentsAction = ({id, rating, comment}: { id: string, rating: number, comment: string }): ThunkActionResult =>
+export const postCommentsAction = ({id, rating, comment}: {id: string, rating: number, comment: string}): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    try {
-      const {data} = await api.post(`${APIRoute.Comments}/${id}`, {rating, comment});
-      dispatch(loadOfferComments(adaptCommentsToClient(data)));
-    } catch {
-      dispatch(loadOfferComments([]));
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
-    }
+    return api.post(`${APIRoute.Comments}/${id}`, {rating, comment})
+      .then(({data}) => {
+        dispatch(loadOfferComments(adaptCommentsToClient(data)));
+      }, () => {
+        toast.error(InformationMessages.POSTING_COMMENT_ERROR);
+        return Promise.reject();
+      })
   };
 
 export const fetchFavoritesAction = (): ThunkActionResult =>

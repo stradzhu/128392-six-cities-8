@@ -47,7 +47,8 @@ export const DEFAULT_SORT_TYPE = SortTypes.POPULAR;
 export enum InformationMessages {
   AUTH_FAIL = 'Ошибка авторизации, возможно, неправильный email или пароль',
   DATA_LOADING_ERROR = 'Ошибка загрузки данных',
-  AUTH_NO = 'Не забудьте авторизоваться'
+  AUTH_NO = 'Не забудьте авторизоваться',
+  POSTING_COMMENT_ERROR = 'Ошибка отправки комментария',
 }
 
 export enum ReviewSetting {
