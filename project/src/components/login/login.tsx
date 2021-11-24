@@ -4,7 +4,9 @@ import {useDispatch} from 'react-redux';
 import {loginAction} from '../../store/actions/api-actions';
 import {AuthData} from '../../types/auth-data';
 import Header from '../header/header';
-import {AppRoute} from '../../consts';
+import {ALL_CITY_LIST, AppRoute} from '../../consts';
+import {changeCity} from '../../store/actions/action';
+import {getRandomInteger} from '../../utils';
 
 type InputLoginForm = {
   [key: string]: {
@@ -58,6 +60,8 @@ function Login(): JSX.Element {
     });
   };
 
+  const randomCity = ALL_CITY_LIST[getRandomInteger(0, ALL_CITY_LIST.length - 1)];
+
   return (
     <div className="page page--gray page--login">
       <Header isPageLogin/>
@@ -88,8 +92,8 @@ function Login(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Root}>
-                <span>Amsterdam</span>
+              <Link className="locations__item-link" to={AppRoute.Root} onClick={() => dispatch(changeCity(randomCity))}>
+                <span>{randomCity}</span>
               </Link>
             </div>
           </section>

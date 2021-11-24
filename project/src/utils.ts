@@ -99,3 +99,5 @@ export const adaptCommentsToClient = (reviews: Reviews): Reviews => (
     adaptCommentToClient(review)
   ))
 );
+
+export const getRandomInteger = (min: number, max: number) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
