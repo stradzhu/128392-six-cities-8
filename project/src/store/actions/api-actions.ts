@@ -19,7 +19,7 @@ export const loginAction = ({login: email, password}: AuthData): ThunkActionResu
       dispatch(setUserInfo(adaptUserInfoToClient(data)));
       dispatch(redirectToRoute(AppRoute.Root));
     } catch {
-      toast.error(InformationMessages.AUTH_FAIL);
+      toast.error(InformationMessages.AuthFail);
     }
   };
 
@@ -36,7 +36,7 @@ export const fetchOffersAction = (): ThunkActionResult =>
       const {data} = await api.get(APIRoute.Hotels);
       dispatch(loadOffers(adaptOffersToClient(data)));
     } catch {
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
+      toast.error(InformationMessages.DataLoadingError);
     }
   };
 
@@ -47,7 +47,7 @@ export const checkAuthAction = (): ThunkActionResult =>
       dispatch(setAuthorization(AuthorizationStatus.Auth));
       dispatch(setUserInfo(adaptUserInfoToClient(data)));
     } catch {
-      toast.info(InformationMessages.AUTH_NO);
+      toast.info(InformationMessages.AuthNo);
     }
   };
 
@@ -58,7 +58,7 @@ export const fetchOfferByIdAction = (id: string): ThunkActionResult =>
       dispatch(loadOfferById(adaptOfferToClient(data)));
     } catch {
       dispatch(loadOfferById(null));
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
+      toast.error(InformationMessages.DataLoadingError);
     }
   };
 
@@ -84,14 +84,14 @@ export const fetchNearOffersAction = (id: string): ThunkActionResult =>
 
 export const fetchSetFavoriteAction = (id: number, status: boolean): ThunkActionResult =>
   async (dispatch, getState, api) => {
-    if (getState()[NameSpace.user].authorizationStatus === AuthorizationStatus.Auth) {
+    if (getState()[NameSpace.User].authorizationStatus === AuthorizationStatus.Auth) {
       try {
         await api.post(`${APIRoute.Favorite}/${id}/${Number(status)}`);
         dispatch(setFavorite(id, status)); // обновит массив offers
         dispatch(setFavoriteInOffer(id, status));  // обновит один offer
         dispatch(setFavoriteNearOffers(id, status));  // обновит nearOffers
       } catch {
-        toast.error(InformationMessages.DATA_LOADING_ERROR);
+        toast.error(InformationMessages.DataLoadingError);
       }
     } else {
       dispatch(redirectToRoute(AppRoute.Login));
@@ -99,15 +99,15 @@ export const fetchSetFavoriteAction = (id: number, status: boolean): ThunkAction
   };
 
 export const postCommentsAction = ({id, rating, comment}: {id: string, rating: number, comment: string}): ThunkActionResult =>
-  async (dispatch, _getState, api): Promise<void> => {
-    return api.post(`${APIRoute.Comments}/${id}`, {rating, comment})
+  async (dispatch, _getState, api): Promise<void> => (
+    api.post(`${APIRoute.Comments}/${id}`, {rating, comment})
       .then(({data}) => {
         dispatch(loadOfferComments(adaptCommentsToClient(data)));
       }, () => {
-        toast.error(InformationMessages.POSTING_COMMENT_ERROR);
+        toast.error(InformationMessages.PostingCommentError);
         return Promise.reject();
       })
-  };
+  );
 
 export const fetchFavoritesAction = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
@@ -116,6 +116,6 @@ export const fetchFavoritesAction = (): ThunkActionResult =>
       dispatch(loadFavorites(adaptOffersToClient(data)));
     } catch {
       dispatch(loadFavorites([]));
-      toast.error(InformationMessages.DATA_LOADING_ERROR);
+      toast.error(InformationMessages.DataLoadingError);
     }
   };

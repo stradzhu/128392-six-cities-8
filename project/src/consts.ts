@@ -20,8 +20,8 @@ export enum AuthorizationStatus {
 }
 
 export enum UrlMarker {
-  DEFAULT = '/img/pin.svg',
-  CURRENT = '/img/pin-active.svg',
+  Default = '/img/pin.svg',
+  Current = '/img/pin-active.svg',
 }
 
 export const ALL_CITY_LIST = [
@@ -36,25 +36,25 @@ export const ALL_CITY_LIST = [
 export const DEFAULT_CITY = ALL_CITY_LIST[0];
 
 export enum SortTypes {
-  POPULAR = 'Popular',
-  PRICE_DOWN = 'Price: low to high',
-  PRICE_UP = 'Price: high to low',
-  RATING_DOWN = 'Top rated first',
+  Popular = 'Popular',
+  PriceUp = 'Price: low to high',
+  PriceDown = 'Price: high to low',
+  RatingDown = 'Top rated first',
 }
 
-export const DEFAULT_SORT_TYPE = SortTypes.POPULAR;
+export const DEFAULT_SORT_TYPE = SortTypes.Popular;
 
 export enum InformationMessages {
-  AUTH_FAIL = 'Ошибка авторизации, возможно, неправильный email или пароль',
-  DATA_LOADING_ERROR = 'Ошибка загрузки данных',
-  AUTH_NO = 'Не забудьте авторизоваться',
-  POSTING_COMMENT_ERROR = 'Ошибка отправки комментария',
+  AuthFail = 'Ошибка авторизации, возможно, неправильный email или пароль',
+  DataLoadingError = 'Ошибка загрузки данных',
+  AuthNo = 'Не забудьте авторизоваться',
+  PostingCommentError = 'Ошибка отправки комментария',
 }
 
 export enum ReviewSetting {
-  MIN = 50,
-  MAX = 300,
-  MAX_COUNT_PER_PAGE = 10
+  Min = 50,
+  Max = 300,
+  MaxCountPerPage = 10
 }
 
 export const RatingStar = [

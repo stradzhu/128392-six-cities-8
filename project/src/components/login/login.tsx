@@ -60,7 +60,7 @@ function Login(): JSX.Element {
     });
   };
 
-  const randomCity = ALL_CITY_LIST[getRandomInteger(0, ALL_CITY_LIST.length - 1)];
+  const [randomCity] = useState(ALL_CITY_LIST[getRandomInteger(0, ALL_CITY_LIST.length - 1)]);
 
   return (
     <div className="page page--gray page--login">

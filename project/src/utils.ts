@@ -5,13 +5,13 @@ import {UserInfo} from './types/user-info';
 
 export const getSortedOffers = (offers: OffersType, SortType: SortTypes): OffersType => {
   switch (SortType) {
-    case SortTypes.PRICE_UP: {
-      return offers.slice().sort((offerA, offerB) => offerB.price - offerA.price);
-    }
-    case SortTypes.PRICE_DOWN: {
+    case SortTypes.PriceUp: {
       return offers.slice().sort((offerA, offerB) => offerA.price - offerB.price);
     }
-    case SortTypes.RATING_DOWN: {
+    case SortTypes.PriceDown: {
+      return offers.slice().sort((offerA, offerB) => offerB.price - offerA.price);
+    }
+    case SortTypes.RatingDown: {
       return offers.slice().sort((offerA, offerB) => offerB.rating - offerA.rating);
     }
     default: {
@@ -24,7 +24,7 @@ export const getRating = (rating: number): string => `${Math.round(rating) * 100
 
 export const getActualReviews = (reviews: Reviews): Reviews => (
   reviews.slice().sort((reviewA, reviewB) => Date.parse(reviewB.date) - Date.parse(reviewA.date))
-    .slice(0, ReviewSetting.MAX_COUNT_PER_PAGE));
+    .slice(0, ReviewSetting.MaxCountPerPage));
 
 export const adaptOfferToClient = (offerFromBackend: OfferType): OfferType => {
   const adaptedOffer = Object.assign(
@@ -100,4 +100,4 @@ export const adaptCommentsToClient = (reviews: Reviews): Reviews => (
   ))
 );
 
-export const getRandomInteger = (min: number, max: number) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
+export const getRandomInteger = (min: number, max: number): number => Math.round(min - 0.5 + Math.random() * (max - min + 1));

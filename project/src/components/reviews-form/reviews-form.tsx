@@ -10,11 +10,9 @@ function ReviewsForm(): JSX.Element {
 
   const dispatch = useDispatch();
 
-  const onSubmit = (commentPost: {id: string, rating: number, comment: string}) => {
-    return new Promise((resolve) => {
-      resolve(dispatch(postCommentsAction(commentPost)))
-    })
-  }
+  const onSubmit = (commentPost: { id: string, rating: number, comment: string }) => new Promise((resolve) => {
+    resolve(dispatch(postCommentsAction(commentPost)));
+  });
 
   const [isSendingRequest, setSendingRequest] = useState(false);
 
@@ -34,20 +32,20 @@ function ReviewsForm(): JSX.Element {
 
     new Promise((resolve) => resolve(setSendingRequest(true)))
       .then(() => onSubmit({
-          id: String(offer?.id),
-          rating: Number(formState.rating.value),
-          comment: formState.review.value,
-        }))
+        id: String(offer?.id),
+        rating: Number(formState.rating.value),
+        comment: formState.review.value,
+      }))
       .then(() => setFormState({
-          rating: {
-            value: '',
-            isValid: false,
-          },
-          review: {
-            value: '',
-            isValid: false,
-          },
-        }))
+        rating: {
+          value: '',
+          isValid: false,
+        },
+        review: {
+          value: '',
+          isValid: false,
+        },
+      }))
       .catch((error) => {
         toast.error(error);
       })
@@ -60,7 +58,7 @@ function ReviewsForm(): JSX.Element {
 
     let isValid;
     if (name === 'review') {
-      isValid = Boolean(value.length >= ReviewSetting.MIN && value.length <= ReviewSetting.MAX);
+      isValid = Boolean(value.length >= ReviewSetting.Min && value.length <= ReviewSetting.Max);
     } else {
       // если это рейтинг, то любой клик, т.е. любая оценка нам подходит
       isValid = true;
@@ -109,7 +107,7 @@ function ReviewsForm(): JSX.Element {
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">{ReviewSetting.MIN} characters</b>.
+          with at least <b className="reviews__text-amount">{ReviewSetting.Min} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit"
           disabled={isSendingRequest || !formState.review.isValid || !formState.rating.isValid}
