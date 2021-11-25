@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 import Header from '../header/header';
 import {useDispatch, useSelector} from 'react-redux';
 import FavoritesEmpty from '../favorites-empty/favorites-empty';
-import {getRating} from '../../utils';
+import {getRating} from '../../utils/utils';
 import {fetchFavoritesAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import React, {useCallback, useEffect, useState} from 'react';

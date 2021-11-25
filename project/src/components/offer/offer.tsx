@@ -5,7 +5,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import ErrorNotFound from '../error-not-found/error-not-found';
 import Map from '../map/map';
 import {useDispatch, useSelector} from 'react-redux';
-import {getRating} from '../../utils';
+import {getRating} from '../../utils/utils';
 import Loader from '../loader/loader';
 import {fetchCommentsAction, fetchNearOffersAction, fetchOfferByIdAction, fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import Reviews from '../reviews/reviews';

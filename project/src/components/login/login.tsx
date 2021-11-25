@@ -6,7 +6,7 @@ import {AuthData} from '../../types/auth-data';
 import Header from '../header/header';
 import {ALL_CITY_LIST, AppRoute} from '../../consts';
 import {changeCity} from '../../store/actions/action';
-import {getRandomInteger} from '../../utils';
+import {getRandomInteger} from '../../utils/utils';
 
 type InputLoginForm = {
   [key: string]: {

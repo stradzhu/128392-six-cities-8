@@ -7,7 +7,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeCity} from '../../store/actions/action';
 import PlaceSorting from '../places-sorting/place-sorting';
-import {getSortedOffers} from '../../utils';
+import {getSortedOffers} from '../../utils/utils';
 import {fetchOffersAction} from '../../store/actions/api-actions';
 import Loader from '../loader/loader';
 import MainEmpty from '../main-empty/main-empty';

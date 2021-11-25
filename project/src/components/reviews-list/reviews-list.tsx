@@ -1,5 +1,5 @@
 import {Reviews} from '../../types/reviews';
-import {getActualReviews, getRating} from '../../utils';
+import {getActualReviews, getRating} from '../../utils/utils';
 
 type ReviewsListProp = {
   reviews: Reviews

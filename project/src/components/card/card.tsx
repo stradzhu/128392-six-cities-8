@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {OfferType} from '../../types/offer-info';
-import {getRating} from '../../utils';
+import {getRating} from '../../utils/utils';
 import {fetchSetFavoriteAction} from '../../store/actions/api-actions';
 import {getAuthorizationStatus} from '../../store/selectors/selectors';
 import {AuthorizationStatus} from '../../consts';

@@ -7,7 +7,7 @@ import {
 import {dropToken, saveToken} from '../../services/token';
 import {APIRoute, AppRoute, AuthorizationStatus, InformationMessages} from '../../consts';
 import {AuthData} from '../../types/auth-data';
-import {adaptCommentsToClient, adaptOffersToClient, adaptOfferToClient, adaptUserInfoToClient} from '../../utils';
+import {adaptCommentsToClient, adaptOffersToClient, adaptOfferToClient, adaptUserInfoToClient} from '../../utils/adapters';
 import {NameSpace} from '../reducer/root-reducer';
 
 export const loginAction = ({login: email, password}: AuthData): ThunkActionResult =>
