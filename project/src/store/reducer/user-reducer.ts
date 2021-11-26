@@ -3,7 +3,7 @@ import {UserState} from '../../types/state';
 import {createReducer} from '@reduxjs/toolkit';
 import {setAuthorization, requireLogout, setUserInfo} from '../actions/action';
 
-const initialState: UserState = {
+export const initialState: UserState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   userInfo: null,
 };

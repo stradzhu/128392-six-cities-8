@@ -2,7 +2,7 @@ import {DataState} from '../../types/state';
 import {createReducer} from '@reduxjs/toolkit';
 import {setFavorite, setFavoriteNearOffers, setFavoriteInOffer, loadOffers, loadFavorites, loadOfferComments, loadOfferById, loadNearOffers} from '../actions/action';
 
-const initialState: DataState = {
+export const initialState: DataState = {
   offers: [],
   offer: null,
   favorites: [],

@@ -3,7 +3,7 @@ import {MainState} from '../../types/state';
 import {createReducer} from '@reduxjs/toolkit';
 import {changeCity, changeSortType} from '../actions/action';
 
-const initialState: MainState = {
+export const initialState: MainState = {
   activeCity: DEFAULT_CITY,
   currentSortType: DEFAULT_SORT_TYPE,
 };
